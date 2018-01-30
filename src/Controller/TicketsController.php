@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TicketsController extends Controller
 {
     /**
-     * @Route("/", name="Homepage")
+     * @Route("/update", name="data_update")
      */
-    public function indexAction(){
+    public function updateDataAction(){
 
         $agencies = ['AIXENPROVENCE', 'AVIGNON', 'BONAPARTE', 'BRUXELLES-LOUISE', 'CANNES', 'FRANCS_BOURGEOIS',
             'LAPOMPE', 'LOUVRE', 'LUXEMBOURG', 'LYON', 'MONTPELLIER', 'PASSYHOMME', 'PASSY_FEMME', 'SAINTHONORE', 'SEINE', 'STRASBOURG', 'VICTORHUGO', 'WESTBOURNE' ];
@@ -63,4 +63,14 @@ class TicketsController extends Controller
         var_dump("fertig");
         return $this->render('tickets/home.html.twig',[]);
     }
+
+    /**
+     * @Route("/",name="homepage")
+     */
+    public function getFileCSVAction(){
+
+
+        return $this->render('tickets/home.html.twig');
+    }
+
 }
