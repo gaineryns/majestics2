@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="entry")
  * @ORM\Entity(repositoryClass="App\Repository\EntryRepository")
  */
 class Entry
@@ -66,11 +67,6 @@ class Entry
      * @ORM\Column(type="integer", nullable=true)
      */
     private $entree_totale;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $sortie_totale;
 
     /**
      * @return mixed
@@ -151,8 +147,6 @@ class Entry
     {
         $this->magasin = $magasin;
     }
-
-
 
     /**
      * @return mixed
@@ -267,24 +261,9 @@ class Entry
     }
 
     /**
-     * @return mixed
+     * @ORM\Column(type="integer", nullable=true)
      */
-    public function getIp()
-    {
-        return $this->ip;
-    }
+    private $sortie_totale;
 
-    /**
-     * @param mixed $ip
-     */
-    public function setIp($ip)
-    {
-        $this->ip = $ip;
-    }
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $ip;
-
+    // add your own fields
 }

@@ -13,16 +13,22 @@ class EntryRepository extends ServiceEntityRepository
         parent::__construct($registry, Entry::class);
     }
 
-    /*
-    public function findBySomething($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.something = :value')->setParameter('value', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+
+    public function allEntryBetween($etablissement, $start, $end){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT date_format(e.datetime, \'%d/%m/%Y - %Hh\') as heure_creation ,sum(e.entree) as enter 
+              FROM App\Entity\Entry e
+              WHERE (date(e.datetime)  BETWEEN  :start and :fin ) and e.magasin = :etablissement
+              GROUP by heure_creation 
+            '
+        )->setParameter('start', $start)
+        ->setParameter('fin', $end)
+         ->setParameter('etablissement', $etablissement );
+
+        // returns an array of Product objects
+        return $query->execute();
+
     }
-    */
+
 }

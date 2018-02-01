@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Entity\Entry;
+use App\Entity\Tickets;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,10 +68,52 @@ class TicketsController extends Controller
     /**
      * @Route("/",name="homepage")
      */
-    public function getFileCSVAction(){
+    public function indexAction(){
+
+        $this->getFileCSV('test', '2017-12-02', '2017-12-02');
+        return $this->render('tickets/home.html.twig',[ ]);
+    }
+
+    public function getFileCSV($etablissement, $date_debut,$date_fin){
 
 
-        return $this->render('tickets/home.html.twig');
+        $header = ["Etablissement", "heure de creation","Nombre de ventes", "Nombre d'entree", "Taux"];
+        $tableau =[];
+        $tableau[0] = $header;
+
+        $entryRepo = $this->getDoctrine()->getRepository(Entry::class);
+        $entry = $entryRepo->allEntryBetween('AIXENPROVENCE',$date_debut,$date_fin);
+
+        $ticketRepo = $this->getDoctrine()->getRepository(Tickets::class);
+        $tickets = $ticketRepo->allTicketBetween('Aix en Provence',$date_debut,$date_fin);
+
+        foreach ($entry as $enter){
+            $heure= $enter['heure_creation'];
+            $nbrAcheteur= 0;
+            $nbrEntree = intval($enter['enter'] );
+            $taux = 0;
+
+            $tableau[]= ['Aix en Provence', $heure, $nbrAcheteur ,$nbrEntree, $taux ];
+        }
+            foreach ($tickets as $ticket){
+                for ($i=1; $i < 22; $i++){
+                    if($ticket['heure_creation'] == $tableau[$i][1]){
+                        $tableau[$i][2]= intval($ticket['nombre_acheteur']);
+                    }
+                    if($tableau[$i][3] == 0){
+                        $tableau[$i][4] = 0;
+                    }else{
+                        $tableau[$i][4] =  str_replace('.', ',',round($tableau[$i][2]/$tableau[$i][3] *100, 2) ). "%";
+                    }
+                }
+            }
+            $file = fopen('test1.csv', 'w+');
+            foreach ($tableau as $tab){
+                fputcsv($file, $tab, ';');
+            }
+
+            fclose($file);
+        return true;
     }
 
 }
