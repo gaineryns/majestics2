@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TicketsController extends Controller
 {
+
+
     /**
      * @Route("/update", name="data_update")
      */
@@ -70,14 +72,85 @@ class TicketsController extends Controller
      */
     public function indexAction(){
 
-        $this->getFileCSV('test', '2017-12-02', '2017-12-02');
-        return $this->render('tickets/home.html.twig',[ ]);
+        $this->getAllFileCSV('2017-11-02', '2017-11-02');
+        //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
+        return $this->render('Tickets/home.html.twig',[ ]);
+    }
+
+
+    public function getAllFileCSV($date_debut,$date_fin){
+
+
+
+        $agencies = [
+            ['capteur'=> 'AIXENPROVENCE', 'magasin'=> 'Aix en Provence'],
+            ['capteur'=> 'AVIGNON', 'magasin'=> 'Avignon'],
+            ['capteur'=> 'BONAPARTE', 'magasin'=> 'Bonaparte'],
+            /*['capteur'=> 'BRUXELLES-LOUISE', 'magasin'=> 'Bruxelles-Antoine'],*/
+            ['capteur'=> 'CANNES', 'magasin'=> 'Cannes'],
+            // ['capteur'=> 'FRANCS_BOURGEOIS', 'magasin'=> 'Francs Bourgeois'],
+            //['capteur'=> 'LAPOMPE', 'magasin'=> 'La Pompe'],
+             //['capteur'=> 'LOUVRE', 'magasin'=> 'Louvre'],
+            // ['capteur'=> 'LUXEMBOURG', 'magasin'=> 'Luxembourg Vtl'],
+            //['capteur'=> 'LYON', 'magasin'=> 'Lyon'],
+            ['capteur'=> 'MONTPELLIER', 'magasin'=> 'Montpellier'],
+            ['capteur'=> 'PASSYHOMME', 'magasin'=> 'Passy H'],
+            ['capteur'=> 'PASSY_FEMME', 'magasin'=> 'Passy F'],
+            ['capteur'=> 'SAINTHONORE', 'magasin'=> 'Saint Honore'],
+            ['capteur'=> 'SEINE', 'magasin'=> 'rue de Seine'],
+            ['capteur'=> 'STRASBOURG', 'magasin'=> 'Strasbourg'],
+            ['capteur'=> 'VICTORHUGO', 'magasin'=> 'Victor Hugo'],            //['capteur'=> 'WESTBOURNE', 'magasin'=> '']
+        ];
+
+        foreach ($agencies as $agency) {
+            $header = ["Etablissement", "heure de creation", "Nombre de ventes", "Nombre d'entree", "Taux de transformation"];
+            $tableau = [];
+            $tableau[0] = $header;
+
+            $entryRepo = $this->getDoctrine()->getRepository(Entry::class);
+            $entry = $entryRepo->allEntryBetween($agency['capteur'], $date_debut, $date_fin);
+
+            $ticketRepo = $this->getDoctrine()->getRepository(Tickets::class);
+            $tickets = $ticketRepo->allTicketBetween($agency['magasin'], $date_debut, $date_fin);
+
+            if(empty($tickets) || empty($entry)){
+                continue;
+            }
+            foreach ($entry as $enter) {
+                $heure = $enter['heure_creation'];
+                $nbrAcheteur = 0;
+                $nbrEntree = intval($enter['enter']);
+                $taux = 0;
+
+                $tableau[] = [$agency['capteur'], $heure, $nbrAcheteur, $nbrEntree, $taux];
+            }
+
+            foreach ($tickets as $ticket) {
+                for ($i = 1; $i < 22; $i++) {
+                    if ($ticket['heure_creation'] == $tableau[$i][1]) {
+                        $tableau[$i][2] = intval($ticket['nombre_acheteur']);
+                    }
+                    if ($tableau[$i][3] == 0) {
+                        $tableau[$i][4] = 0;
+                    } else {
+                        $tableau[$i][4] = str_replace('.', ',', round($tableau[$i][2] / $tableau[$i][3] * 100, 2)) . " %";
+                    }
+                }
+            }
+            $file = fopen($agency['capteur'].'.csv', 'w+');
+            foreach ($tableau as $tab) {
+                fputcsv($file, $tab, ';');
+            }
+
+            fclose($file);
+        }
+        return true;
     }
 
     public function getFileCSV($etablissement, $date_debut,$date_fin){
 
 
-        $header = ["Etablissement", "heure de creation","Nombre de ventes", "Nombre d'entree", "Taux"];
+        $header = ["Etablissement", "heure de creation","Nombre de ventes", "Nombre d'entree", "Taux de transformation"];
         $tableau =[];
         $tableau[0] = $header;
 
@@ -103,7 +176,7 @@ class TicketsController extends Controller
                     if($tableau[$i][3] == 0){
                         $tableau[$i][4] = 0;
                     }else{
-                        $tableau[$i][4] =  str_replace('.', ',',round($tableau[$i][2]/$tableau[$i][3] *100, 2) ). "%";
+                        $tableau[$i][4] =  str_replace('.', ',',round($tableau[$i][2]/$tableau[$i][3] *100, 2) ). " %";
                     }
                 }
             }
