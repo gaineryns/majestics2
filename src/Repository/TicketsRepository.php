@@ -40,5 +40,22 @@ class TicketsRepository extends ServiceEntityRepository
 
     }
 
+    public function cumulinfoticket( $start, $end){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT date_format(t.heureDeCreation, \'%d/%m/%Y - %Hh\') as heure_creation ,  count(t.numero) as nombre_acheteur
+            FROM App\Entity\Tickets t
+            WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) 
+            GROUP by heure_creation 
+            order by heure_creation 
+            '
+        )->setParameter('start', $start)
+            ->setParameter('fin', $end );
+
+        // returns an array of Product objects
+        return $query->execute();
+
+    }
+
 }
 
