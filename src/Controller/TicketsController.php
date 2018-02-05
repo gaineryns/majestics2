@@ -78,8 +78,8 @@ class TicketsController extends Controller
     public function indexAction(){
 
 
-        $this->getAllCsvCumul('2017-11-04', '2017-11-04');
-        $this->getAllFileCSV('2017-11-04', '2017-11-04');
+        //$this->getAllCsvCumul('2017-11-04', '2017-11-04');
+        $this->getAllFileCSV('2017-11-03', '2017-11-04');
         //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
         return $this->render('Tickets/home.html.twig',[ ]);
     }
@@ -125,7 +125,8 @@ class TicketsController extends Controller
         $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(16);
         $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(18);
 
-        $spreadsheet->getActiveSheet()->setAutoFilter($spreadsheet->getActiveSheet()->calculateWorksheetDataDimension());
+        $spreadsheet->getActiveSheet()->setAutoFilter($spreadsheet
+            ->getActiveSheet()->calculateWorksheetDataDimension());
 
         $spreadsheet->getActiveSheet()->setTitle('Simple'); //set a title for Worksheet
 
@@ -187,8 +188,14 @@ class TicketsController extends Controller
             ['capteur'=> 'VICTORHUGO', 'magasin'=> 'Victor Hugo'],            //['capteur'=> 'WESTBOURNE', 'magasin'=> '']
         ];
 
-        foreach ($agencies as $agency) {
-            $header = ["Etablissement", "heure de creation", "Nombre de ventes", "Nombre d'entree", "Taux de transformation"];
+
+        $p=0;
+
+        $spreadsheet = new Spreadsheet();
+
+
+        foreach ($agencies as $k=>$agency) {
+            $header = [ "Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation"];
             $tableau = [];
             $tableau[0] = $header;
 
@@ -198,37 +205,78 @@ class TicketsController extends Controller
             $ticketRepo = $this->getDoctrine()->getRepository(Tickets::class);
             $tickets = $ticketRepo->allTicketBetween($agency['magasin'], $date_debut, $date_fin);
 
+
             if(empty($tickets) || empty($entry)){
                 continue;
-            }
-            foreach ($entry as $enter) {
-                $heure = $enter['heure_creation'];
-                $nbrAcheteur = 0;
-                $nbrEntree = intval($enter['enter']);
-                $taux = 0;
+            }else {
+                foreach ($entry as $enter) {
+                    $heure = $enter['heure_creation'];
+                    $nbrAcheteur = 0;
+                    $nbrEntree = intval($enter['enter']);
+                    $taux = 0;
 
-                $tableau[] = [$agency['capteur'], $heure, $nbrAcheteur, $nbrEntree, $taux];
-            }
-
-            foreach ($tickets as $ticket) {
-                for ($i = 1; $i < count($tableau); $i++) {
-                    if ($ticket['heure_creation'] == $tableau[$i][1]) {
-                        $tableau[$i][2] = intval($ticket['nombre_acheteur']);
-                    }
-                    if ($tableau[$i][3] == 0) {
-                        $tableau[$i][4] = 0;
-                    } else {
-                        $tableau[$i][4] = str_replace('.', ',', round($tableau[$i][2] / $tableau[$i][3] * 100, 2)) . " %";
-                    }
+                    $tableau[] = [$heure, $nbrAcheteur, $nbrEntree, $taux];
                 }
-            }
-            $file = fopen($agency['capteur']."-".$date_debut.'.csv', 'w+');
-            foreach ($tableau as $tab) {
-                fputcsv($file, $tab, ';');
+
+                foreach ($tickets as $ticket) {
+                    for ($i = 1; $i < count($tableau); $i++) {
+                        if ($ticket['heure_creation'] == $tableau[$i][0]) {
+                            $tableau[$i][1] = intval($ticket['nombre_acheteur']);
+                        }
+                        if ($tableau[$i][2] == 0) {
+                            $tableau[$i][3] = 0;
+                        } else {
+                            $tableau[$i][3] = str_replace('.', ',', round($tableau[$i][1] / $tableau[$i][2] * 100, 2)) . " %";
+                        }
+                    }
+
+                }
+
+
+                dump($tableau);
+                $oneMoreSheet= $spreadsheet->createSheet($p);
+                $oneMoreSheet->fromArray(
+                    $tableau
+                );
+
+
+                $cell_st =[
+                    'font' =>['bold' => true],
+                    'alignment' =>['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+                    'borders'=>['bottom' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
+                ];
+                $oneMoreSheet->getStyle('A1:D1')->applyFromArray($cell_st);
+
+//set columns width
+                $oneMoreSheet->getColumnDimension('A')->setWidth(20);
+                $oneMoreSheet->getColumnDimension('B')->setWidth(20);
+                $oneMoreSheet->getColumnDimension('C')->setWidth(20);
+                $oneMoreSheet->getColumnDimension('D')->setWidth(25);
+
+                $oneMoreSheet->setTitle($agency['magasin']);
+
+                $oneMoreSheet->setAutoFilter($spreadsheet
+                    ->getActiveSheet()->calculateWorksheetDataDimension());
+                $p++;
+
             }
 
-            fclose($file);
+
         }
+
+
+        $spreadsheet->createSheet(8)
+            ->fromArray(
+                ["test"]  // The data to set
+                        // Array values with this value will not be set
+            // Top left coordinate of the worksheet range where
+            //    we want to set these values (default is A1)
+            )->setTitle("info gene");
+        $writer = new Xlsx($spreadsheet);
+        $fxls ='Rapport.xlsx';
+        $writer->save($fxls);
+
+        dump();
         return true;
     }
 
