@@ -79,11 +79,11 @@ class TicketsController extends Controller
     public function indexAction(){
 
 
-        //$this->getAllCsvCumul('2017-11-04', '2017-11-04');
-        $this->getAllFileCSV('2017-11-03', '2017-11-04');
+        //$this->getAllFileCSV('2017-11-03', '2017-11-04');
         //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
         return $this->render('Tickets/home.html.twig',[ ]);
     }
+
 
 
 
