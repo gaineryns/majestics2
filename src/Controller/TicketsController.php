@@ -6,7 +6,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TicketsController extends Controller
@@ -25,7 +27,7 @@ class TicketsController extends Controller
 
         foreach ($agencies as $agency){
             $finder = new Finder();
-            $finder->name('*.dat')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
+            $finder->name('*.dat')->date('since 7 days ago')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
 
             foreach ($finder as $file){
 
@@ -74,14 +76,30 @@ class TicketsController extends Controller
     }
 
     /**
-     * @Route("/",name="homepage")
+     * @Route("/accueil",name="accueil")
      */
-    public function indexAction(){
+    public function indexAction(Request $request, \Swift_Mailer $mailer){
+
+        $datedebut = $request->request->get('datedebut');
+        $datefin = $request->request->get('datefin');
+        if( $datedebut && $datefin ){
+            $name = $this->getAllFileCSV(date($datedebut), date($datefin));
+
+            $message = new \Swift_Message('Rapport Majestic Filatures');
+            $message->setFrom('team@smartiiz.com')
+                ->setTo('steve.yongwo@smartiiz.com')
+                ->setBody('attachment test')
+            ->attach(\Swift_Attachment::fromPath($name));
+
+            $mailer->send($message);
 
 
+
+        }
         //$this->getAllFileCSV('2017-11-03', '2017-11-04');
         //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
-        return $this->render('Tickets/home.html.twig',[ ]);
+        return $this->render('Tickets/home.html.twig',[ 'dated' => $datedebut,
+            'datef' => $datefin]);
     }
 
 
@@ -127,136 +145,196 @@ class TicketsController extends Controller
             $spreadsheet = new Spreadsheet();
 
 
-            /*
-             * création d'un tableau contenant toutes les données à afficher dans la feuille de calcul
-             */
-        foreach ($agencies as $k=>$agency) {
-            /*
-             * entête du tableau
-             */
-            $header = [ "Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation"];
-            $tableau = [];
-            $tableau[0] = $header;
 
-            /*
-             * données capteurs du magasin en cours de traitement durant la période définie
-             */
-            $entryRepo = $this->getDoctrine()->getRepository(Entry::class);
-            $entry = $entryRepo->allEntryBetween($agency['capteur'], $date_debut, $date_fin);
+        $Cumulentree = $this->getDoctrine()->getRepository(Entry::class)
+            ->CumulinfoEntry($date_debut,$date_fin);
+        $CumulTickets = $this->getDoctrine()->getRepository(Tickets::class)
+            ->cumulinfoticket($date_debut, $date_fin);
 
-            /*
-             * données tickets du magasin en cours de traitement durant la période définie
-             */
-            $ticketRepo = $this->getDoctrine()->getRepository(Tickets::class);
-            $tickets = $ticketRepo->allTicketBetween($agency['magasin'], $date_debut, $date_fin);
+        $Cumulentree_total = 0;
+        $Cumulticket_total =0;
 
-            /*
-             * s'il n'y a pas de données de capteur le traitement passe au traiment
-             * d'un autre magasin
-             * sinon récupération des différentes informations et les stocker dans le
-             * tableau "$tableau"
-             */
-            if( empty($entry)){
-                continue;
-            }else {
+        $headerC = [ "Magasin(s)","Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation"];
+        $tableauC = [];
+        $tableauC[0] = $headerC;
 
-                foreach ($entry as $enter) {
-                    $heure = $enter['heure_creation'];
-                    $nbrAcheteur = 0;
-                    $nbrEntree = (intval($enter['enter'])? intval($enter['enter']): 0);
-                    $taux = 0;
+        foreach ($Cumulentree as $enter) {
+            $heure = $enter['heure_creation'];
+            $nbrAcheteur = 0;
+            $nbrEntree = (intval($enter['enter'])? intval($enter['enter']): 0);
+            $Cumulentree_total += $nbrEntree;
+            if ($nbrEntree == 0){
+
+                $taux = 0;
+            }else{
+
+                $taux = '0%';
+            }
 
 
-                    $tableau[] = [$heure, $nbrAcheteur, $nbrEntree, $taux];
-                }
 
-                foreach ($tickets as $ticket) {
-                    for ($i = 1; $i < count($tableau); $i++) {
-                        if ($ticket['heure_creation'] == $tableau[$i][0]) {
-                            $tableau[$i][1] = (intval($ticket['nombre_acheteur'])?intval($ticket['nombre_acheteur']):0);
-                        }
-                        /*
-                         * evitons une division par zero
-                         */
-                        if ($tableau[$i][2] == 0) {
-                            $tableau[$i][3] = 0;
-                        } else {
-                            $tableau[$i][3] = str_replace('.', ',', round($tableau[$i][1] / $tableau[$i][2] * 100, 2)) . " %";
-                        }
-                    }
+            foreach($agencies as $agence){
+                if($agence['capteur']== $enter['etablissement']){
 
-                }
-
-
-                /*
-                 * pour chaque donnée de magasin stockée dans le $tableau, créons et
-                 * enrégistrons ces données dans une feuille de calcul de notre classeur
-                 * portant le nom du magasin en cours de traitement
-                 */
-
-                $oneMoreSheet= $spreadsheet->createSheet($p);
-                $oneMoreSheet->fromArray(
-                    $tableau
-
-                );
-
-
-                /*
-                 * style de la feuille de calcul
-                 */
-                $cell_st =[
-                    'font' =>['bold' => true],
-                    'alignment' =>['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
-                    'borders'=>['bottom' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
-                ];
-                $oneMoreSheet->getStyle('A1:D1')->applyFromArray($cell_st);
-
-//set columns width
-                $oneMoreSheet->getColumnDimension('A')->setWidth(20);
-                $oneMoreSheet->getColumnDimension('B')->setWidth(20);
-                $oneMoreSheet->getColumnDimension('C')->setWidth(20);
-                $oneMoreSheet->getColumnDimension('D')->setWidth(25);
-
-                $oneMoreSheet->getRowDimension('1')->setRowHeight(40);
-
-                $oneMoreSheet->setTitle($agency['magasin']);
-
-                 $oneMoreSheet->setAutoFilter($spreadsheet
-                    ->getActiveSheet()->calculateWorksheetDataDimension());
-
-                 /*
-                  * filtrons les informations à afficher pour un meilleur rendu
-                  */
-                 $autoFilter = $oneMoreSheet->getAutoFilter();
-
-                 $columnfilter = $autoFilter->getColumn('D');
-
-                 $columnfilter->setFilterType(Column::AUTOFILTER_FILTERTYPE_CUSTOMFILTER)
-                     ->createRule()
-                     ->setRule(Column\Rule::AUTOFILTER_COLUMN_RULE_EQUAL,
-                              '*%')
-                     ->setRuleType(Column\Rule::AUTOFILTER_RULETYPE_CUSTOMFILTER);
-
-                 $p++;
+                    $etablissement = $agence['magasin'];
 
             }
 
+            }
+            $tableauC[] = [$etablissement ,$heure, $nbrAcheteur, $nbrEntree, $taux];
+        }
+
+        foreach ($CumulTickets as $ticket) {
+            for ($i = 1; $i < count($tableauC); $i++) {
+                if (($ticket['heure_creation'] == $tableauC[$i][1])&& $ticket['etablissement'] == $tableauC[$i][0]) {
+                    $tableauC[$i][2] = (intval($ticket['nombre_acheteur'])?intval($ticket['nombre_acheteur']):0);
+                    $Cumulticket_total += $tableauC[$i][2];
+
+                    /*
+                * evitons une division par zero
+                */
+                    if (($tableauC[$i][3] == 0)|| ($tableauC[$i][3] == '') || empty($tableauC[$i][2])) {
+                        $tableauC[$i][4] = 0;
+                    } else {
+                        $tableauC[$i][4] = str_replace('.', ',', round($tableauC[$i][2] / $tableauC[$i][3] * 100, 2)) . "%";
+                    }
+                }
+
+            }
 
         }
 
 
-        $spreadsheet->createSheet(8)
-            ->fromArray(
-                ["test"]  // The data to set
-                        // Array values with this value will not be set
+        //$tableautotaux = ["Totaux", "=sous.total(9;D4:D2000)", $Cumulentree_total, str_replace('.', ',', round(($Cumulentree_total? 100*$Cumulticket_total/$Cumulentree_total:0),2))." %"];
+
+
+        /*   $tableauC = array_reverse($tableauC);
+          $tableauC[] = $tableautotaux;
+          $tableauC[] = $tableautotaux;
+          $tableauC = array_reverse($tableauC);*/
+
+        $cumulsheet = $spreadsheet->createSheet(17);
+            $cumulsheet->fromArray(
+                $tableauC,  // The data to set
+                 null,'A5'       // Array values with this value will not be set
             // Top left coordinate of the worksheet range where
             //    we want to set these values (default is A1)
-            )->setTitle("info gene");
+            );
+
+
+            $cumulsheet->setCellValue('B1', 'Nombre de ventes' );
+            $cumulsheet->setCellValue('C1', 'Nombre d\'entrées');
+            $cumulsheet->setCellValue('D1', 'Taux de transformation en %');
+
+            $cumulsheet->setCellValue('A2', "Récapitulatif magasins France" );
+            $cumulsheet->setCellValue('B2', '=SUM(C4:C2000)' );
+            $cumulsheet->setCellValue('C2', '=SUM(D4:D2000)');
+            $cumulsheet->setCellValue('D2', '=ROUND(((B2/C2)*100),2)');
+
+
+            $cumulsheet->setCellValue('A3', "Récapitulatif magasin(s) sélectionné(s)" );
+            $cumulsheet->setCellValue('B3', '=SUBTOTAL(109,C4:C2000)' );
+            $cumulsheet->setCellValue('C3', '=SUBTOTAL(109,D4:D2000)');
+            $cumulsheet->setCellValue('D3', '=ROUND(((B3/C3)*100),2)');
+
+
+            /*
+             * Style de la feuille de calcul du tableau de cumul
+             */
+
+        $styleArray = array(
+            'font' => array(
+
+            ),
+            'alignment' => array(
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' =>\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+
+            ),
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+        $cumulsheet->getRowDimension('1')->setRowHeight(30);
+        $cumulsheet->getRowDimension('2')->setRowHeight(40);
+        $cumulsheet->getRowDimension('3')->setRowHeight(40);
+        $cumulsheet->getRowDimension('5')->setRowHeight(30);
+
+        $cumulsheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        $cumulsheet->getStyle('A1:D3')->applyFromArray($styleArray);
+        $cumulsheet->getStyle('A1:D3')->getAlignment()->setWrapText(true);
+
+        $cumulsheet->getStyle('B1:D1')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $cumulsheet->getStyle('A2:D2')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('eeeeee');
+
+        $cumulsheet->getStyle('A3:D3')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $cumulsheet->getStyle('A5:E5')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $cumulsheet->getStyle('B1:D1')->getFont()->setBold(true);
+        $cumulsheet->getStyle('A2:A3')->getFont()->setBold(true);
+      /*  $cumulsheet->getStyle('B1:D1')->applyFromArray($styleArray);
+        $cumulsheet->getStyle('B1:D1')->getAlignment()->setWrapText(true);*/
+
+        /*
+                 * style de la feuille de calcul
+                 */
+        $cell_st =[
+            'font' =>['bold' => true],
+            'alignment' =>['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER],
+            'borders'=>['allBorders' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
+        ];
+        $cumulsheet->getStyle('A5:E5')->applyFromArray($cell_st);
+
+//set columns width
+        $cumulsheet->getColumnDimension('A')->setWidth(20);
+        $cumulsheet->getColumnDimension('B')->setWidth(20);
+        $cumulsheet->getColumnDimension('C')->setWidth(20);
+        $cumulsheet->getColumnDimension('D')->setWidth(25);
+        $cumulsheet->getColumnDimension('E')->setWidth(25);
+
+        /*$cumulsheet->getRowDimension('1')->setRowHeight(40);*/
+
+        $cumulsheet->setTitle('info gene');
+
+
+
+        $cumulsheet->setAutoFilter('A5:E2000');
+
+
+
+
+        $autoFilter1 = $cumulsheet->getAutoFilter();
+
+        $columnfilter1 = $autoFilter1->getColumn('A');
+
+
+        $columnfilter1->setFilterType(Column::AUTOFILTER_FILTERTYPE_FILTER)
+            ->createRule()
+            ->setRule(Column\Rule::AUTOFILTER_COLUMN_RULE_EQUAL,
+                $tableauC[3][0]);
+
+
         $writer = new Xlsx($spreadsheet);
         $fxls ='Rapport-'.$date_debut.'.xlsx';
         $writer->save($fxls);
 
-        return true;
+        return $fxls;
     }
 
     public function getFileCSV($etablissement, $date_debut,$date_fin){
@@ -300,8 +378,6 @@ class TicketsController extends Controller
             fclose($file);
         return true;
     }
-
-
 
 
     public function getAllCsvCumul($date_debut,$date_fin ){

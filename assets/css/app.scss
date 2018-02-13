@@ -1,1 +1,21 @@
-@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+.bloc_branding{
+  margin: 40px auto;
+}
+.container{
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+.btn-primary{
+  background-color: #101010;
+}
+body{
+  font-family: "NeuzeitRegular";
+}
+
+.inline{
+  display: inline-block !important;
+}

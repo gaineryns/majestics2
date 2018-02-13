@@ -34,10 +34,11 @@ class EntryRepository extends ServiceEntityRepository
     public function CumulinfoEntry( $start, $end){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'SELECT date_format(e.datetime, \'%d/%m/%Y - %Hh\') as heure_creation ,sum(e.entree) as enter 
+            'SELECT e.magasin as etablissement,date_format(e.datetime, \'%d/%m/%Y - %Hh\') as heure_creation ,sum(e.entree) as enter 
               FROM App\Entity\Entry e
               WHERE (date(e.datetime)  BETWEEN  :start and :fin ) 
-              GROUP by heure_creation 
+              GROUP by  etablissement, heure_creation
+              order by  etablissement, heure_creation
             '
         )->setParameter('start', $start)
             ->setParameter('fin', $end);

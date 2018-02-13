@@ -1,6 +1,45 @@
 {% include 'base.html.twig' %}
 {% block body %}
+
+
+
     <div class="container">
+
+        <div class="row fa-align-center bloc_branding ">
+            <div class="col-sm-8 col-sm-offset-2 col-lg-8 col-lg-offset-2  ">
+                <img src="{{ asset('majesticsfilatures.svg') }}" alt="" width="100%" class="logo_majestic">
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+                <form  class="" action="{{ path('accueil') }}" method="post">
+
+                   <h3 class="text-center " style="margin: 30px 0">Générer un rapport de magasins</h3>
+                    <fieldset>
+
+                        <div class="form-group inline">
+                            <label for="date_debut">Date de debut</label>
+                            <input type="date" id="date_debut" name="datedebut" min="2015-01-01" class="form-control"/>
+                        </div>
+                        <div class="form-group inline">
+                            <label for="date_fin">Date de fin</label>
+                            <input type="date" id="date_fin" name="datefin"  class="form-control"/>
+                        </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i> Création du rapport
+                        </button>
+                    </fieldset>
+                    {% if (datef and dated) %}
+                        <div class="alert alert-success" role="alert">
+                            <strong>Votre rapport a bien été envoyé.</strong>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
 
     </div>
 {% endblock %}
