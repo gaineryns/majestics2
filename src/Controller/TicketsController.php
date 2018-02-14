@@ -23,11 +23,11 @@ class TicketsController extends Controller
         $agencies = ['AIXENPROVENCE', 'AVIGNON', 'BONAPARTE', 'BRUXELLES-LOUISE', 'CANNES', 'FRANCS_BOURGEOIS',
             'LAPOMPE', 'LOUVRE', 'LUXEMBOURG', 'LYON', 'MONTPELLIER', 'PASSYHOMME', 'PASSY_FEMME', 'SAINTHONORE', 'SEINE', 'STRASBOURG', 'VICTORHUGO', 'WESTBOURNE' ];
 
-        $agencies = array_reverse($agencies);
+        //$agencies = array_reverse($agencies);
 
         foreach ($agencies as $agency){
             $finder = new Finder();
-            $finder->name('*.dat')->date('since 7 days ago')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
+            $finder->name('*.dat')->date('since yesterday')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
 
             foreach ($finder as $file){
 
@@ -144,6 +144,155 @@ class TicketsController extends Controller
          */
             $spreadsheet = new Spreadsheet();
 
+        $header = [ "Magasin", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation en %"];
+        $tableau = [];
+        $tableau[0] = $header;
+
+            /*
+             * création d'un tableau contenant toutes les données à afficher dans la feuille de calcul
+             */
+        foreach ($agencies as $k=>$agency) {
+            /*
+             * entête du tableau
+             */
+
+
+            /*
+             * données capteurs du magasin en cours de traitement durant la période définie
+             */
+            $entryRepo = $this->getDoctrine()->getRepository(Entry::class);
+            $entry = $entryRepo->allEntryBetween($agency['capteur'], $date_debut, $date_fin);
+
+            /*
+             * données tickets du magasin en cours de traitement durant la période définie
+             */
+            $ticketRepo = $this->getDoctrine()->getRepository(Tickets::class);
+            $tickets = $ticketRepo->allTicketBetween($agency['magasin'], $date_debut, $date_fin);
+
+            /*
+             * s'il n'y a pas de données de capteur le traitement passe au traiment
+             * d'un autre magasin
+             * sinon récupération des différentes informations et les stocker dans le
+             * tableau "$tableau"
+             */
+            if( empty($entry)){
+                continue;
+            }else {
+                $entree_total = 0;
+                $ticket_total =0;
+
+                foreach ($entry as $enter) {
+                    $magasin = $enter['etablissement'];
+                    foreach ($agencies as $agence){
+                        if($magasin == $agence['capteur']){
+                            $magasin = $agence['magasin'];
+                        }
+                    }
+                    $nbrAcheteur = 0;
+                    $nbrEntree = (intval($enter['enter'])? intval($enter['enter']): 0);
+                    $entree_total += $nbrEntree;
+
+
+                        $taux = 0;
+
+
+
+
+                    $tableau[] = [$magasin, $nbrAcheteur, $nbrEntree, $taux];
+                }
+
+                foreach ($tickets as $ticket) {
+                    for ($i = 1; $i < count($tableau); $i++) {
+                        if ($ticket['etablissement'] == $tableau[$i][0]) {
+                            $tableau[$i][1] = (intval($ticket['nombre_acheteur'])?intval($ticket['nombre_acheteur']):0);
+                            $ticket_total += $tableau[$i][1];
+                        }
+                        /*
+                         * evitons une division par zero
+                         */
+                        if ($tableau[$i][2] == 0) {
+                            $tableau[$i][3] = 0;
+                        } else {
+                            $tableau[$i][3] = floatval(round($tableau[$i][1] / $tableau[$i][2] * 100, 2)) ;
+                        }
+                    }
+
+                }
+
+            }
+               // $tableau[] = ["Totaux", $ticket_total, $entree_total, str_replace('.', ',', round(($entree_total? 100*$ticket_total/$entree_total:0),2))." %"];
+
+                /*
+                 * pour chaque donnée de magasin stockée dans le $tableau, créons et
+                 * enrégistrons ces données dans une feuille de calcul de notre classeur
+                 * portant le nom du magasin en cours de traitement
+                 */
+
+
+        }
+
+        $ticketIDF = $ticketRepo->ticketIleFrance([$agencies[7]['magasin'],$agencies[11]['magasin'],
+            $agencies[12]['magasin'],$agencies[14]['magasin']],$date_debut,$date_fin);
+
+        foreach ($ticketIDF as $idf){
+            $ticketIDF1 = $idf['nombre_acheteur'];
+        }
+
+        $entreeIDF = $entryRepo->entreeIleFrance([$agencies[7]['capteur'],$agencies[11]['capteur'],
+            $agencies[12]['capteur'],$agencies[14]['capteur']],$date_debut,$date_fin);
+
+        foreach ($entreeIDF as $Eidf){
+            $entreeIDF1 = $Eidf['enter'];
+        }
+
+        $tableau[]= ['Ile-de-france', $ticketIDF1, $entreeIDF1, floatval(round(($ticketIDF1/$entreeIDF1)*100,2))];
+
+
+
+        $oneMoreSheet= $spreadsheet->createSheet(1);
+        $oneMoreSheet->fromArray(
+            $tableau
+
+        );
+
+
+        /*
+         * style de la feuille de calcul
+         */
+        $cell_st =[
+            'font' =>['bold' => true],
+            'alignment' =>['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'borders'=>['bottom' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
+        ];
+        $oneMoreSheet->getStyle('A1:D1')->applyFromArray($cell_st);
+
+//set columns width
+        $oneMoreSheet->getColumnDimension('A')->setWidth(20);
+        $oneMoreSheet->getColumnDimension('B')->setWidth(20);
+        $oneMoreSheet->getColumnDimension('C')->setWidth(20);
+        $oneMoreSheet->getColumnDimension('D')->setWidth(30);
+
+        $oneMoreSheet->getRowDimension('1')->setRowHeight(40);
+
+        $oneMoreSheet->setTitle('magasin');
+
+        $oneMoreSheet->setAutoFilter($spreadsheet
+            ->getActiveSheet()->calculateWorksheetDataDimension());
+
+        /*
+         * filtrons les informations à afficher pour un meilleur rendu
+         */
+
+        $p++;
+
+
+
+        $oneMoreSheet->getStyle('A1:A17')->getFont()->setBold(true);
+        $oneMoreSheet->getStyle('A1:D17')->getBorders()->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+
+
 
 
         $Cumulentree = $this->getDoctrine()->getRepository(Entry::class)
@@ -154,7 +303,7 @@ class TicketsController extends Controller
         $Cumulentree_total = 0;
         $Cumulticket_total =0;
 
-        $headerC = [ "Magasin(s)","Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation"];
+        $headerC = [ "Magasin(s)","Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation en %"];
         $tableauC = [];
         $tableauC[0] = $headerC;
 
@@ -163,13 +312,10 @@ class TicketsController extends Controller
             $nbrAcheteur = 0;
             $nbrEntree = (intval($enter['enter'])? intval($enter['enter']): 0);
             $Cumulentree_total += $nbrEntree;
-            if ($nbrEntree == 0){
+
 
                 $taux = 0;
-            }else{
 
-                $taux = '0%';
-            }
 
 
 
@@ -196,7 +342,7 @@ class TicketsController extends Controller
                     if (($tableauC[$i][3] == 0)|| ($tableauC[$i][3] == '') || empty($tableauC[$i][2])) {
                         $tableauC[$i][4] = 0;
                     } else {
-                        $tableauC[$i][4] = str_replace('.', ',', round($tableauC[$i][2] / $tableauC[$i][3] * 100, 2)) . "%";
+                        $tableauC[$i][4] = floatval(round($tableauC[$i][2] / $tableauC[$i][3] * 100));
                     }
                 }
 
@@ -259,9 +405,10 @@ class TicketsController extends Controller
         );
 
         $cumulsheet->getRowDimension('1')->setRowHeight(30);
-        $cumulsheet->getRowDimension('2')->setRowHeight(40);
-        $cumulsheet->getRowDimension('3')->setRowHeight(40);
+        $cumulsheet->getRowDimension('2')->setRowHeight(45);
+        $cumulsheet->getRowDimension('3')->setRowHeight(45);
         $cumulsheet->getRowDimension('5')->setRowHeight(30);
+
 
         $cumulsheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);

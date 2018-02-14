@@ -22,14 +22,35 @@ class TicketsRepository extends ServiceEntityRepository
 
 
 
+    public function ticketIleFrance($etablissement, $start, $end){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT   count(t.numero) as nombre_acheteur
+            FROM App\Entity\Tickets t
+            WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) and (t.etablissement = :etablissement1 
+             or t.etablissement = :etablissement2  or t.etablissement = :etablissement3 or t.etablissement = :etablissement4)
+            
+            '
+        )->setParameter('start', $start)
+            ->setParameter('fin', $end )
+            ->setParameter('etablissement1', $etablissement[0] )
+            ->setParameter('etablissement2', $etablissement[1] )
+            ->setParameter('etablissement3', $etablissement[2] )
+            ->setParameter('etablissement4', $etablissement[3] );
+
+        // returns an array of Product objects
+        return $query->execute();
+
+    }
+
     public function allTicketBetween($etablissement, $start, $end){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'SELECT t.etablissement,date_format(t.heureDeCreation, \'%d/%m/%Y - %Hh\') as heure_creation ,  count(t.numero) as nombre_acheteur
+            'SELECT t.etablissement as etablissement,  count(t.numero) as nombre_acheteur
             FROM App\Entity\Tickets t
             WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) and t.etablissement = :etablissement 
-            GROUP by heure_creation, t.etablissement
-            order by heure_creation, t.etablissement
+            GROUP by t.etablissement
+            order by t.etablissement
             '
         )->setParameter('start', $start)
         ->setParameter('fin', $end )

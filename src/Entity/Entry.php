@@ -68,6 +68,31 @@ class Entry
      */
     private $entree_totale;
 
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $ip;
+
+    /**
+     * @return mixed
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param mixed $ip
+     */
+    public function setIp($ip): void
+    {
+        $this->ip = $ip;
+    }
+
+
+
+
     /**
      * @return mixed
      */
