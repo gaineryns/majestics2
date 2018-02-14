@@ -148,10 +148,11 @@ class TicketsController extends Controller
         $tableau = [];
         $tableau[0] = $header;
 
+
             /*
              * création d'un tableau contenant toutes les données à afficher dans la feuille de calcul
              */
-        foreach ($agencies as $k=>$agency) {
+        foreach ($agencies as $agency) {
             /*
              * entête du tableau
              */
@@ -175,11 +176,13 @@ class TicketsController extends Controller
              * sinon récupération des différentes informations et les stocker dans le
              * tableau "$tableau"
              */
+
+
             if( empty($entry)){
                 continue;
             }else {
                 $entree_total = 0;
-                $ticket_total =0;
+                $ticket_total = 0;
 
                 foreach ($entry as $enter) {
                     $magasin = $enter['etablissement'];
@@ -232,14 +235,17 @@ class TicketsController extends Controller
         }
 
         $ticketIDF = $ticketRepo->ticketIleFrance([$agencies[7]['magasin'],$agencies[11]['magasin'],
-            $agencies[12]['magasin'],$agencies[14]['magasin']],$date_debut,$date_fin);
+            $agencies[12]['magasin'],$agencies[14]['magasin'],$agencies[2]['magasin'],$agencies[5]['magasin']
+            ,$agencies[16]['magasin']
+        ],$date_debut,$date_fin);
 
         foreach ($ticketIDF as $idf){
             $ticketIDF1 = $idf['nombre_acheteur'];
         }
 
         $entreeIDF = $entryRepo->entreeIleFrance([$agencies[7]['capteur'],$agencies[11]['capteur'],
-            $agencies[12]['capteur'],$agencies[14]['capteur']],$date_debut,$date_fin);
+            $agencies[12]['capteur'],$agencies[14]['capteur']
+            ,$agencies[2]['capteur'],$agencies[5]['capteur'],$agencies[16]['capteur']],$date_debut,$date_fin);
 
         foreach ($entreeIDF as $Eidf){
             $entreeIDF1 = $Eidf['enter'];

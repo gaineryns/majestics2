@@ -19,7 +19,8 @@ class EntryRepository extends ServiceEntityRepository
             'SELECT sum(e.entree) as enter 
               FROM App\Entity\Entry e
               WHERE (date(e.datetime)  BETWEEN  :start and :fin ) and (e.magasin = :etablissement1
-              or e.magasin = :etablissement2 or e.magasin = :etablissement3 or e.magasin = :etablissement4)
+              or e.magasin = :etablissement2 or e.magasin = :etablissement3 or e.magasin = :etablissement4
+              or e.magasin = :etablissement5 or e.magasin = :etablissement6 or e.magasin = :etablissement7)
               
             '
         )->setParameter('start', $start)
@@ -27,7 +28,10 @@ class EntryRepository extends ServiceEntityRepository
             ->setParameter('etablissement1', $etablissement[0] )
             ->setParameter('etablissement2', $etablissement[1] )
             ->setParameter('etablissement3', $etablissement[2] )
-            ->setParameter('etablissement4', $etablissement[3] );
+            ->setParameter('etablissement4', $etablissement[3] )
+            ->setParameter('etablissement5', $etablissement[4] )
+            ->setParameter('etablissement6', $etablissement[5] )
+            ->setParameter('etablissement7', $etablissement[6] );
 
         // returns an array of Product objects
         return $query->execute();
@@ -42,12 +46,12 @@ class EntryRepository extends ServiceEntityRepository
         $query = $em->createQuery(
             'SELECT e.magasin as etablissement,sum(e.entree) as enter 
               FROM App\Entity\Entry e
-              WHERE (date(e.datetime)  BETWEEN  :start and :fin ) and e.magasin = :etablissement
+              WHERE (date(e.datetime)  BETWEEN  :start and :fin ) and e.magasin like :etablissement
               GROUP by e.magasin
             '
         )->setParameter('start', $start)
         ->setParameter('fin', $end)
-         ->setParameter('etablissement', $etablissement );
+         ->setParameter('etablissement', '%'. $etablissement.'%' );
 
         // returns an array of Product objects
         return $query->execute();
