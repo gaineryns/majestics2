@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84b49cd0-284e-46ca-a22b-e8f178fc2908" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.platform/services.yaml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/.platform.app.yaml" afterPath="$PROJECT_DIR$/.platform.app.yaml" />
     </list>
@@ -21,8 +20,8 @@
       <file leaf-file-name=".platform.app.yaml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.platform.app.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+            <state relative-caret-position="36">
+              <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -272,7 +271,7 @@
       <workItem from="1517524208042" duration="17833000" />
       <workItem from="1517575539993" duration="66140000" />
       <workItem from="1518078171194" duration="33379000" />
-      <workItem from="1518448570714" duration="48226000" />
+      <workItem from="1518448570714" duration="48448000" />
     </task>
     <task id="LOCAL-00001" summary="fichier pour toutes les agences générés pour une date défini">
       <created>1517558505903</created>
@@ -372,11 +371,25 @@
       <option name="project" value="LOCAL" />
       <updated>1518655016076</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="presentation">
+      <created>1518655171775</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1518655171775</updated>
+    </task>
+    <task id="LOCAL-00016" summary="presentation">
+      <created>1518655201678</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1518655201678</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="173741000" />
+    <option name="totallyTimeSpent" value="173963000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="29" width="1366" height="739" extended-state="6" />
@@ -829,8 +842,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.platform.app.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+        <state relative-caret-position="36">
+          <caret line="20" column="12" lean-forward="false" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
           <folding />
         </state>
       </provider>

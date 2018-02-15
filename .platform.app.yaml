@@ -18,9 +18,9 @@ variables:
 hooks:
     build: |
         rm web/app_dev.php
-        bin/console --env=prod assets:install --no-debug
+        php bin/console --env=prod assets:install --no-debug
     deploy: |
-        bin/console --env=prod cache:clear
+        php bin/console --env=prod cache:clear
 # The relationships of the application with services or other applications.
 # The left-hand side is the name of the relationship as it will be exposed
 # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
@@ -40,6 +40,6 @@ web:
     locations:
         "/":
             # The public directory of the app, relative to its root.
-            root: "web"
+            root: "public"
             # The front-controller script to send non-static requests to.
-            passthru: "/app.php"
+            passthru: "/index.php"
