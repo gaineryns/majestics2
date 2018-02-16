@@ -8,11 +8,11 @@ return new class extends DefaultDeployer
     {
         return $this->getConfigBuilder()
             // SSH connection string to connect to the remote server (format: user@host-or-IP:port-number)
-            ->server('nowteamnuy-devteam@ftp.cluster002.ovh.net')
+            ->server('defaultsteve@steveyongwo.com:2222')
             // the absolute path of the remote server directory where the project is deployed
-            ->deployDir('~/preprod/majesticfilatures')
+            ->deployDir('web/')
             // the URL of the Git repository where the project code is hosted
-            ->repositoryUrl('git@github.com/gaineryns/majestics2.git')
+            ->repositoryUrl('git@github.com:gaineryns/majestics2.git')
             // the repository branch to deploy
             ->repositoryBranch('master')
 

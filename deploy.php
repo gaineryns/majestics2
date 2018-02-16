@@ -22,13 +22,13 @@ add('writable_dirs', []);
 
 // Hosts
 
-host('ftp.cluster002.ovh.net')
+host('steveyongwo.com')
     ->stage('prod')
-    ->user('nowteamnuy-devteam')
-    ->port(22)
+    ->user('defaultsteve')
+    ->port(2222)
     ->configFile('~/.ssh/config')
     ->identityFile('~/.ssh/id_rsa')
-    ->set('deploy_path', '~/preprod/majesticfilatures');
+    ->set('deploy_path', '/var/www/steveyongwo.com/web');
 
 
 // Tasks
