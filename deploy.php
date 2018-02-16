@@ -1,7 +1,7 @@
 <?php
 namespace Deployer;
 
-require 'recipe/symfony.php';
+require 'recipe/symfony3.php';
 
 // Project name
 set('application', 'my_project');
@@ -28,7 +28,7 @@ host('steveyongwo.com')
     ->port(2222)
     ->configFile('~/.ssh/config')
     ->identityFile('~/.ssh/id_rsa')
-    ->set('deploy_path', '/var/www/steveyongwo.com/web');
+    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/web/');
 
 
 // Tasks
