@@ -34,6 +34,7 @@ host('steveyongwo.com')
 // Tasks
 
 task('build', function () {
+    run('export APP_ENV=prod');
     run('cd {{release_path}} && build');
 });
 
