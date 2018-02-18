@@ -10,22 +10,26 @@ set('env', [
     'APP_ENV' => 'prod',
 ]);
 
+
+
+task('deploy:assets:install', function () {
+});
+
 // Project repository
-set('repository', 'https://github.com/gaineryns/majestics2.git');
+set('repository', 'https://github.com/gaineryns/testdeploy.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
+set('git_tty', true);
 
-// Shared files/dirs between deploys 
+// Shared files/dirs between deploys
 add('shared_files', []);
 add('shared_dirs', []);
 
-// Writable dirs by web server 
+// Writable dirs by web server
 add('writable_dirs', []);
 
 
 // Hosts
-
 host('steveyongwo.com')
     ->stage('prod')
     ->user('defaultsteve')
