@@ -32,7 +32,7 @@ host('steveyongwo.com')
     ->port(2222)
     ->configFile('~/.ssh/config')
     ->identityFile('~/.ssh/id_rsa')
-    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/current/web');
+    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/web');
 
 
 // Tasks
