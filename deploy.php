@@ -6,6 +6,10 @@ require 'recipe/symfony3.php';
 // Project name
 set('application', 'my_project');
 
+set('env', [
+    'APP_ENV' => 'prod',
+]);
+
 // Project repository
 set('repository', 'https://github.com/gaineryns/majestics2.git');
 
@@ -28,13 +32,12 @@ host('steveyongwo.com')
     ->port(2222)
     ->configFile('~/.ssh/config')
     ->identityFile('~/.ssh/id_rsa')
-    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/web/');
+    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/web');
 
 
 // Tasks
 
 task('build', function () {
-    run('export APP_ENV=prod');
     run('cd {{release_path}} && build');
 });
 
