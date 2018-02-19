@@ -16,7 +16,7 @@ task('deploy:assets:install', function () {
 });
 
 // Project repository
-set('repository', 'https://github.com/gaineryns/testdeploy.git');
+set('repository', 'https://github.com/gaineryns/majestics2.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
