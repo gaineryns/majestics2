@@ -51,7 +51,7 @@ class EntryRepository extends ServiceEntityRepository
             '
         )->setParameter('start', $start)
         ->setParameter('fin', $end)
-         ->setParameter('etablissement', '%'. $etablissement.'%' );
+         ->setParameter('etablissement', $etablissement );
 
         // returns an array of Product objects
         return $query->execute();

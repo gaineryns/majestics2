@@ -71,7 +71,7 @@ class TicketsController extends Controller
             }
 
         }
-        var_dump("fertig");
+
         return $this->render('tickets/home.html.twig',[]);
     }
 
@@ -83,7 +83,7 @@ class TicketsController extends Controller
         $datedebut = $request->request->get('datedebut');
         $datefin = $request->request->get('datefin');
         if( $datedebut && $datefin ){
-            $name = $this->getAllFileCSV(date($datedebut), date($datefin));
+            $name = $this->getAllFileCSV('2017-11-11', '2017-11-11');
 
             $message = new \Swift_Message('Rapport Majestic Filatures');
             $message->setFrom('team@smartiiz.com')
@@ -116,7 +116,8 @@ class TicketsController extends Controller
                 ['capteur'=> 'AIXENPROVENCE', 'magasin'=> 'Aix en Provence'],
                 ['capteur'=> 'AVIGNON', 'magasin'=> 'Avignon'],
                 ['capteur'=> 'BONAPARTE', 'magasin'=> 'Bonaparte'],
-                ['capteur'=> 'BRUXELLES-LOUISE', 'magasin'=> 'Bruxelles-Antoine'],
+                ['capteur'=> 'BRUXELLES-LOUISE', 'magasin'=> 'Bruxelles-Louise'],
+                ['capteur'=> 'BRUXELLES-ANTOINE', 'magasin'=> 'Bruxelles-Antoine'],
                 ['capteur'=> 'CANNES', 'magasin'=> 'Cannes'],
                 ['capteur'=> 'FRANCS_BOURGEOIS', 'magasin'=> 'Francs Bourgeois'],
                 ['capteur'=> 'LAPOMPE', 'magasin'=> 'La Pompe'],
@@ -186,6 +187,7 @@ class TicketsController extends Controller
 
                 foreach ($entry as $enter) {
                     $magasin = $enter['etablissement'];
+
                     foreach ($agencies as $agence){
                         if($magasin == $agence['capteur']){
                             $magasin = $agence['magasin'];
@@ -251,7 +253,7 @@ class TicketsController extends Controller
             $entreeIDF1 = $Eidf['enter'];
         }
 
-        $tableau[]= ['Ile-de-france', $ticketIDF1, $entreeIDF1, floatval(round(($ticketIDF1/$entreeIDF1)*100,2))];
+        $tableau[]= ['Ile-de-france', $ticketIDF1, $entreeIDF1, ($entreeIDF1 == 0) ? 0: floatval(round(($ticketIDF1/$entreeIDF1)*100,2))];
 
 
 
@@ -326,12 +328,11 @@ class TicketsController extends Controller
 
 
             foreach($agencies as $agence){
-                if($agence['capteur']== $enter['etablissement']){
+                if($agence['capteur'] == $enter['etablissement']){
 
                     $etablissement = $agence['magasin'];
 
-            }
-
+                }
             }
             $tableauC[] = [$etablissement ,$heure, $nbrAcheteur, $nbrEntree, $taux];
         }
@@ -470,7 +471,7 @@ class TicketsController extends Controller
         $cumulsheet->setAutoFilter('A5:E2000');
 
 
-
+/*
 
         $autoFilter1 = $cumulsheet->getAutoFilter();
 
@@ -481,7 +482,7 @@ class TicketsController extends Controller
             ->createRule()
             ->setRule(Column\Rule::AUTOFILTER_COLUMN_RULE_EQUAL,
                 $tableauC[3][0]);
-
+*/
 
         $writer = new Xlsx($spreadsheet);
         $fxls ='Rapport-'.$date_debut.'.xlsx';
