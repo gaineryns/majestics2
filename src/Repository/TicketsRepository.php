@@ -22,19 +22,31 @@ class TicketsRepository extends ServiceEntityRepository
 
 
 
+    public function ticketlist(){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT  t.etablissement
+            FROM App\Entity\Tickets t
+            WHERE t.nature like \'FFO\'
+            
+            '
+        );
+        return $query->execute();
+    }
+
     public function ticketIleFrance($etablissement, $start, $end){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
             'SELECT   count(t.numero) as nombre_acheteur
             FROM App\Entity\Tickets t
-            WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) and (t.etablissement = :etablissement1 
+            WHERE (t.heureDeCreation BETWEEN  :start and :fin ) and (t.etablissement = :etablissement1 
              or t.etablissement = :etablissement2  or t.etablissement = :etablissement3 
              or t.etablissement = :etablissement4 or t.etablissement = :etablissement5 or t.etablissement = :etablissement6
-             or t.etablissement = :etablissement7)
+             or t.etablissement = :etablissement7) and t.nature like \'FFO\'
             
             '
-        )->setParameter('start', $start)
-            ->setParameter('fin', $end )
+        )->setParameter('start', $start. " 00:00:00")
+            ->setParameter('fin', $end." 23:59:59")
             ->setParameter('etablissement1', $etablissement[0] )
             ->setParameter('etablissement2', $etablissement[1] )
             ->setParameter('etablissement3', $etablissement[2] )
@@ -51,15 +63,15 @@ class TicketsRepository extends ServiceEntityRepository
     public function allTicketBetween($etablissement, $start, $end){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'SELECT t.etablissement as etablissement,  count(t.numero) as nombre_acheteur
+            'SELECT lower(t.etablissement) as etablissement,  count(t.numero) as nombre_acheteur
             FROM App\Entity\Tickets t
-            WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) and t.etablissement = :etablissement 
+            WHERE (t.heureDeCreation BETWEEN :start and :fin)  and lower(t.etablissement) = :etablissement  and t.nature like \'FFO\'
             GROUP by t.etablissement
             order by t.etablissement
             '
-        )->setParameter('start', $start)
-        ->setParameter('fin', $end )
-            ->setParameter('etablissement', $etablissement );
+        )->setParameter('start', $start. " 00:00:00")
+            ->setParameter('fin', $end." 23:59:59")
+            ->setParameter('etablissement', strtolower($etablissement) );
 
         // returns an array of Product objects
         return $query->execute();
@@ -69,14 +81,14 @@ class TicketsRepository extends ServiceEntityRepository
     public function cumulinfoticket( $start, $end){
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'SELECT t.etablissement as etablissement,date_format(t.heureDeCreation, \'%d/%m/%Y - %Hh\') as heure_creation ,  count(t.numero) as nombre_acheteur
+            'SELECT t.etablissement as etablissement,t.heureDeCreation as heure_creation, count(t.numero) as nombre_acheteur
             FROM App\Entity\Tickets t
-            WHERE (date(t.heureDeCreation) BETWEEN  :start and :fin ) 
-            GROUP by  t.etablissement, heure_creation 
-            order by  t.etablissement ,heure_creation asc
+            WHERE (t.heureDeCreation BETWEEN :start and :fin)  and t.nature like \'FFO\'
+            GROUP by  t.etablissement, t.heureDeCreation
+            
             '
-        )->setParameter('start', $start)
-            ->setParameter('fin', $end );
+        )->setParameter('start', $start. " 00:00:00")
+            ->setParameter('fin', $end." 23:59:59" );
 
         // returns an array of Product objects
         return $query->execute();

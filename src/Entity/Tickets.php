@@ -7,192 +7,116 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tickets
  *
- * @ORM\Table(name="tickets")
- * @ORM\Entity(repositoryClass="App\Repository\TicketsRepository")
+ * @ORM\Table(name="MTICKETAPP")
+ * @ORM\Entity(repositoryClass="App\Repository\TicketsRepository", readOnly=true)
  */
 class Tickets
 {
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
     /**
      * @var string
      *
-     * @ORM\Column(name="Nature", type="string", length=45, nullable=true)
+     * @ORM\Column(name="GP_NATUREPIECEG", type="string", length=45, nullable=true)
      */
     private $nature;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="Date", type="datetime", nullable=true)
+     * @ORM\Column(name="GP_DATEPIECE", type="datetime", nullable=true)
      */
     private $date;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="Souche", type="integer", nullable=true)
+     * @ORM\Column(name="GP_SOUCHE", type="integer", nullable=true)
      */
     private $souche;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="Heure_de_creation", type="datetime", nullable=true)
+     * @ORM\Column(name="GP_HEURECREATION", type="datetime", nullable=true)
      */
     private $heureDeCreation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Etablissement", type="string", length=45, nullable=true)
+     * @ORM\Column(name="ET_LIBELLE", type="string", length=45, nullable=true)
      */
     private $etablissement;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="Depot_document", type="integer", nullable=true)
+     * private $depotDocument;
      */
-    private $depotDocument;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Caisse", type="string", length=45, nullable=true)
+     * @ORM\Column(name="GP_CAISSE", type="string", length=45, nullable=true)
      */
     private $caisse;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Vendeur", type="string", length=45, nullable=true)
-     */
+
     private $vendeur;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Client", type="string", length=45, nullable=true)
-     */
     private $client;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Nom", type="string", length=45, nullable=true)
-     */
     private $nom;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Prenom", type="string", length=45, nullable=true)
-     */
     private $prenom;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Code_postal", type="string", length=45, nullable=true)
-     */
+
     private $codePostal;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="Total_Qte", type="integer", nullable=true)
-     */
     private $totalQte;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Total_HT_document", type="string", length=45, nullable=true)
-     */
     private $totalHtDocument;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Total_TTC", type="string", length=45, nullable=true)
-     */
     private $totalTtc;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="__remise", type="integer", nullable=true)
-     */
     private $remise;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="Date_de_comptabilisation", type="datetime", nullable=true)
-     */
     private $dateDeComptabilisation;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="Date_creation_doc_", type="datetime", nullable=true)
-     */
     private $dateCreationDoc;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Date_modification_doc_", type="string", length=45, nullable=true)
-     */
     private $dateModificationDoc;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Utilisateur_d_origine", type="string", length=45, nullable=true)
-     */
     private $utilisateurDOrigine;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="Reference_interne_doc_", type="bigint", nullable=true)
-     */
+
     private $referenceInterneDoc;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Ville", type="string", length=45, nullable=true)
-     */
+
     private $ville;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Mode_de_creation", type="string", length=45, nullable=true)
-     */
+
     private $modeDeCreation;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Document_comptabilise", type="string", length=45, nullable=true)
-     */
+
     private $documentComptabilise;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Societe", type="string", length=45, nullable=true)
-     */
+
     private $societe;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="Numero", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="GP_NUMERO", type="integer", nullable=true)
      */
     private $numero;
 
@@ -207,7 +131,7 @@ class Tickets
     /**
      * @param string $nature
      */
-    public function setNature(string $nature)
+    public function setNature(string $nature): void
     {
         $this->nature = $nature;
     }
@@ -223,7 +147,7 @@ class Tickets
     /**
      * @param \DateTime $date
      */
-    public function setDate(\DateTime $date)
+    public function setDate(\DateTime $date): void
     {
         $this->date = $date;
     }
@@ -239,7 +163,7 @@ class Tickets
     /**
      * @param int $souche
      */
-    public function setSouche(int $souche)
+    public function setSouche(int $souche): void
     {
         $this->souche = $souche;
     }
@@ -255,7 +179,7 @@ class Tickets
     /**
      * @param \DateTime $heureDeCreation
      */
-    public function setHeureDeCreation(\DateTime $heureDeCreation)
+    public function setHeureDeCreation(\DateTime $heureDeCreation): void
     {
         $this->heureDeCreation = $heureDeCreation;
     }
@@ -271,25 +195,9 @@ class Tickets
     /**
      * @param string $etablissement
      */
-    public function setEtablissement(string $etablissement)
+    public function setEtablissement(string $etablissement): void
     {
         $this->etablissement = $etablissement;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDepotDocument(): int
-    {
-        return $this->depotDocument;
-    }
-
-    /**
-     * @param int $depotDocument
-     */
-    public function setDepotDocument(int $depotDocument)
-    {
-        $this->depotDocument = $depotDocument;
     }
 
     /**
@@ -303,315 +211,313 @@ class Tickets
     /**
      * @param string $caisse
      */
-    public function setCaisse(string $caisse)
+    public function setCaisse(string $caisse): void
     {
         $this->caisse = $caisse;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getVendeur(): string
+    public function getVendeur()
     {
         return $this->vendeur;
     }
 
     /**
-     * @param string $vendeur
+     * @param mixed $vendeur
      */
-    public function setVendeur(string $vendeur)
+    public function setVendeur($vendeur): void
     {
         $this->vendeur = $vendeur;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getClient(): string
+    public function getClient()
     {
         return $this->client;
     }
 
     /**
-     * @param string $client
+     * @param mixed $client
      */
-    public function setClient(string $client)
+    public function setClient($client): void
     {
         $this->client = $client;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getNom(): string
+    public function getNom()
     {
         return $this->nom;
     }
 
     /**
-     * @param string $nom
+     * @param mixed $nom
      */
-    public function setNom(string $nom)
+    public function setNom($nom): void
     {
         $this->nom = $nom;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getPrenom(): string
+    public function getPrenom()
     {
         return $this->prenom;
     }
 
     /**
-     * @param string $prenom
+     * @param mixed $prenom
      */
-    public function setPrenom(string $prenom)
+    public function setPrenom($prenom): void
     {
         $this->prenom = $prenom;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getCodePostal(): string
+    public function getCodePostal()
     {
         return $this->codePostal;
     }
 
     /**
-     * @param string $codePostal
+     * @param mixed $codePostal
      */
-    public function setCodePostal(string $codePostal)
+    public function setCodePostal($codePostal): void
     {
         $this->codePostal = $codePostal;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getTotalQte(): int
+    public function getTotalQte()
     {
         return $this->totalQte;
     }
 
     /**
-     * @param int $totalQte
+     * @param mixed $totalQte
      */
-    public function setTotalQte(int $totalQte)
+    public function setTotalQte($totalQte): void
     {
         $this->totalQte = $totalQte;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getTotalHtDocument(): string
+    public function getTotalHtDocument()
     {
         return $this->totalHtDocument;
     }
 
     /**
-     * @param string $totalHtDocument
+     * @param mixed $totalHtDocument
      */
-    public function setTotalHtDocument(string $totalHtDocument)
+    public function setTotalHtDocument($totalHtDocument): void
     {
         $this->totalHtDocument = $totalHtDocument;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getTotalTtc(): string
+    public function getTotalTtc()
     {
         return $this->totalTtc;
     }
 
     /**
-     * @param string $totalTtc
+     * @param mixed $totalTtc
      */
-    public function setTotalTtc(string $totalTtc)
+    public function setTotalTtc($totalTtc): void
     {
         $this->totalTtc = $totalTtc;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getRemise(): int
+    public function getRemise()
     {
         return $this->remise;
     }
 
     /**
-     * @param int $remise
+     * @param mixed $remise
      */
-    public function setRemise(int $remise)
+    public function setRemise($remise): void
     {
         $this->remise = $remise;
     }
 
     /**
-     * @return \DateTime
+     * @return mixed
      */
-    public function getDateDeComptabilisation(): \DateTime
+    public function getDateDeComptabilisation()
     {
         return $this->dateDeComptabilisation;
     }
 
     /**
-     * @param \DateTime $dateDeComptabilisation
+     * @param mixed $dateDeComptabilisation
      */
-    public function setDateDeComptabilisation(\DateTime $dateDeComptabilisation)
+    public function setDateDeComptabilisation($dateDeComptabilisation): void
     {
         $this->dateDeComptabilisation = $dateDeComptabilisation;
     }
 
     /**
-     * @return \DateTime
+     * @return mixed
      */
-    public function getDateCreationDoc(): \DateTime
+    public function getDateCreationDoc()
     {
         return $this->dateCreationDoc;
     }
 
     /**
-     * @param \DateTime $dateCreationDoc
+     * @param mixed $dateCreationDoc
      */
-    public function setDateCreationDoc(\DateTime $dateCreationDoc)
+    public function setDateCreationDoc($dateCreationDoc): void
     {
         $this->dateCreationDoc = $dateCreationDoc;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getDateModificationDoc(): string
+    public function getDateModificationDoc()
     {
         return $this->dateModificationDoc;
     }
 
     /**
-     * @param string $dateModificationDoc
+     * @param mixed $dateModificationDoc
      */
-    public function setDateModificationDoc(string $dateModificationDoc)
+    public function setDateModificationDoc($dateModificationDoc): void
     {
         $this->dateModificationDoc = $dateModificationDoc;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getUtilisateurDOrigine(): string
+    public function getUtilisateurDOrigine()
     {
         return $this->utilisateurDOrigine;
     }
 
     /**
-     * @param string $utilisateurDOrigine
+     * @param mixed $utilisateurDOrigine
      */
-    public function setUtilisateurDOrigine(string $utilisateurDOrigine)
+    public function setUtilisateurDOrigine($utilisateurDOrigine): void
     {
         $this->utilisateurDOrigine = $utilisateurDOrigine;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getReferenceInterneDoc(): int
+    public function getReferenceInterneDoc()
     {
         return $this->referenceInterneDoc;
     }
 
     /**
-     * @param int $referenceInterneDoc
+     * @param mixed $referenceInterneDoc
      */
-    public function setReferenceInterneDoc(int $referenceInterneDoc)
+    public function setReferenceInterneDoc($referenceInterneDoc): void
     {
         $this->referenceInterneDoc = $referenceInterneDoc;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getVille(): string
+    public function getVille()
     {
         return $this->ville;
     }
 
     /**
-     * @param string $ville
+     * @param mixed $ville
      */
-    public function setVille(string $ville)
+    public function setVille($ville): void
     {
         $this->ville = $ville;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getModeDeCreation(): string
+    public function getModeDeCreation()
     {
         return $this->modeDeCreation;
     }
 
     /**
-     * @param string $modeDeCreation
+     * @param mixed $modeDeCreation
      */
-    public function setModeDeCreation(string $modeDeCreation)
+    public function setModeDeCreation($modeDeCreation): void
     {
         $this->modeDeCreation = $modeDeCreation;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getDocumentComptabilise(): string
+    public function getDocumentComptabilise()
     {
         return $this->documentComptabilise;
     }
 
     /**
-     * @param string $documentComptabilise
+     * @param mixed $documentComptabilise
      */
-    public function setDocumentComptabilise(string $documentComptabilise)
+    public function setDocumentComptabilise($documentComptabilise): void
     {
         $this->documentComptabilise = $documentComptabilise;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getSociete(): string
+    public function getSociete()
     {
         return $this->societe;
     }
 
     /**
-     * @param string $societe
+     * @param mixed $societe
      */
-    public function setSociete(string $societe)
+    public function setSociete($societe): void
     {
         $this->societe = $societe;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getNumero(): int
+    public function getNumero()
     {
         return $this->numero;
     }
 
     /**
-     * @param int $numero
+     * @param mixed $numero
      */
-    public function setNumero(int $numero)
+    public function setNumero($numero): void
     {
         $this->numero = $numero;
     }
 
-
 }
-
