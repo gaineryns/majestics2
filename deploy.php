@@ -34,7 +34,7 @@ host('steveyongwo.com')
     ->stage('prod')
     ->user('defaultsteve')
     ->port(2222)
-    ->set('deploy_path', '/var/www/clients/client0/steveyongwo.com/web');
+    ->set('deploy_path', '/var/www/clients/client0/web1/web');
 
 
 // Tasks

@@ -74,6 +74,9 @@
       <path value="$PROJECT_DIR$/vendor/easycorp/easy-deploy-bundle" />
       <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
       <path value="$PROJECT_DIR$/vendor/beberlei/DoctrineExtensions" />
+      <path value="$PROJECT_DIR$/vendor/leaseweb/doctrine-pdo-dblib" />
+      <path value="$PROJECT_DIR$/vendor/realestateconz/mssql-bundle" />
+      <path value="$PROJECT_DIR$/vendor/mediamonks/mssql-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

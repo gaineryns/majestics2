@@ -27,7 +27,7 @@ class TicketsController extends Controller
 
         foreach ($agencies as $agency){
             $finder = new Finder();
-            $finder->name('*.dat')->date('since 2 week ago')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
+            $finder->name('*.dat')->date('since yesterday')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
 
             foreach ($finder as $file){
 
@@ -72,7 +72,7 @@ class TicketsController extends Controller
 
         }
 
-        return $this->render('tickets/home.html.twig',[]);
+        return $this->render('tickets/home.html.twig',['datef'=> '', 'dated' =>'']);
     }
 
 
