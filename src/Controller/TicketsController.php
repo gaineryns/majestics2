@@ -107,7 +107,16 @@ class TicketsController extends Controller
             $message = new \Swift_Message('Rapport Majestic Filatures');
             $message->setFrom('team@smartiiz.com')
                 ->setTo('steve.yongwo@smartiiz.com')
-                ->setBody('attachment test')
+                ->setBody('<html>' .
+                    ' <body>' .
+                    '  <p>Madame, Monsieur,</p>' .
+                    ' <p>Vous trouverez ci-joint votre rapport contenant le taux de transformation des magasins de Majestic Filatures.   </p>' .
+                    '  <p>Cordialement</p>' .
+                    '  <p></p>' .
+                    '  <p>Script by Smartiiz</p>' .
+                    ' </body>' .
+                    '</html>',
+                    'text/html')
             ->attach(\Swift_Attachment::fromPath($name));
 
             $mailer->send($message);
@@ -142,7 +151,16 @@ class TicketsController extends Controller
             $message = new \Swift_Message('Rapport Majestic Filatures');
             $message->setFrom('team@smartiiz.com')
                 ->setTo('steve.yongwo@smartiiz.com')
-                ->setBody('attachment test')
+                ->setBody('<html>' .
+                    ' <body>' .
+                    '  <p>Madame, Monsieur,</p>' .
+                    ' <p>Vous trouverez ci-joint votre rapport contenant le taux de transformation des magasins de Majestic Filatures.   </p>' .
+                    '  <p>Cordialement</p>' .
+                    '  <p></p>' .
+                    '  <p>Script by Smartiiz</p>' .
+                    ' </body>' .
+                    '</html>',
+                    'text/html')
                 ->attach(\Swift_Attachment::fromPath($name));
 
             $mailer->send($message);
@@ -361,7 +379,52 @@ class TicketsController extends Controller
 
         $oneMoreSheet->getRowDimension('1')->setRowHeight(40);
 
-        $oneMoreSheet->setTitle('magasin');
+        $styleArray1 = array(
+            'font' => array(
+
+            ),
+            'alignment' => array(
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' =>\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+
+            ),
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+
+        $oneMoreSheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        $oneMoreSheet->getStyle('A1:D3')->applyFromArray($styleArray1);
+        $oneMoreSheet->getStyle('A1:D3')->getAlignment()->setWrapText(true);
+
+        $oneMoreSheet->getStyle('B1:D1')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $oneMoreSheet->getStyle('A2:D2')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('eeeeee');
+
+        $oneMoreSheet->getStyle('A3:D3')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $oneMoreSheet->getStyle('A5:E5')->getFill()
+            ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
+            ->getStartColor()->setARGB('dddddd');
+
+        $oneMoreSheet->getStyle('B1:D1')->getFont()->setBold(true);
+        $oneMoreSheet->getStyle('A2:A3')->getFont()->setBold(true);
+
+
+
+
+        $oneMoreSheet->setTitle('Vue générale');
 
        // $oneMoreSheet->setAutoFilter($spreadsheet
        //     ->getActiveSheet()->calculateWorksheetDataDimension());
@@ -551,7 +614,7 @@ class TicketsController extends Controller
 
         /*$cumulsheet->getRowDimension('1')->setRowHeight(40);*/
 
-        $cumulsheet->setTitle('info gene');
+        $cumulsheet->setTitle('Vue détaillée');
 
 
 

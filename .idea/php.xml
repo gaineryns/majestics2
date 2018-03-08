@@ -77,7 +77,6 @@
       <path value="$PROJECT_DIR$/vendor/leaseweb/doctrine-pdo-dblib" />
       <path value="$PROJECT_DIR$/vendor/realestateconz/mssql-bundle" />
       <path value="$PROJECT_DIR$/vendor/mediamonks/mssql-bundle" />
-      <path value="$PROJECT_DIR$/vendor/symfony/apache-pack" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
