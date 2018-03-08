@@ -32,9 +32,9 @@ add('writable_dirs', []);
 // Hosts
 host('steveyongwo.com')
     ->stage('prod')
-    ->user('defaultmajestic')
+    ->user('defaultsteve')
     ->port(2222)
-    ->set('deploy_path', '/var/www/clients/client0/web2/web');
+    ->set('deploy_path', '/var/www/clients/client0/web1/web');
 
 
 // Tasks

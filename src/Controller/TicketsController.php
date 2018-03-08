@@ -122,7 +122,39 @@ class TicketsController extends Controller
     }
 
 
+    /**
+     * @Route("/daily",name="rapport")
+     */
+    public function yesterdayAction(Request $request, \Swift_Mailer $mailer){
 
+        $datedebut = new \DateTime('yesterday');
+       // $datefin =\DateTime::createFromFormat('Y-m-d', new \DateTime('yesterday'));
+        $datefin = new \DateTime('yesterday');
+
+
+
+
+        if( $datedebut && $datefin ){
+
+
+            $name = $this->getAllFileCSV($datedebut, $datefin);
+
+            $message = new \Swift_Message('Rapport Majestic Filatures');
+            $message->setFrom('team@smartiiz.com')
+                ->setTo('steve.yongwo@smartiiz.com')
+                ->setBody('attachment test')
+                ->attach(\Swift_Attachment::fromPath($name));
+
+            $mailer->send($message);
+
+
+
+        }
+        //$this->getAllFileCSV('2017-11-03', '2017-11-04');
+        //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
+        return $this->render('Tickets/home.html.twig',[ 'dated' => $datedebut,
+            'datef' => $datefin]);
+    }
 
     public function getAllFileCSV($date_debut,$date_fin)
     {
