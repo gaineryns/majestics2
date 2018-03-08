@@ -10,20 +10,20 @@ doctrine:
         default_connection: default
         connections:
             default:
-                driver:   pdo_mysql
-                host:     127.0.0.1
-                port:     3306
-                dbname:   'majestic_db'
-                user:     'gaineryns'
-                password: 'gaineryns'
-                charset:  UTF8
                 #driver:   pdo_mysql
                 #host:     127.0.0.1
                 #port:     3306
-                #dbname:   'c0majestic'
-                #user:     'c0majestic'
-                #password: 'Business='
+                #dbname:   'majestic_db'
+                #user:     'gaineryns'
+                #password: 'gaineryns'
                 #charset:  UTF8
+                driver:   pdo_mysql
+                host:     127.0.0.1
+                port:     3306
+                dbname:   'c0majestic'
+                user:     'c0majestic'
+                password: 'Business='
+                charset:  UTF8
             ticket:
                 driver:   pdo_sqlsrv
                 host:     '37.58.138.236'
