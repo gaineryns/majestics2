@@ -23,9 +23,9 @@ doctrine:
                 dbname:   'c0majestic'
                 user:     'c0majestic'
                 password: 'Business='
-                charset:  UTF8
+                #charset:  UTF8
             ticket:
-                driver_class:   Realestate\MssqlBundle\Driver\PDODblib\Driver
+                driver:   sqlsrv
                 host:     '37.58.138.236'
                 port:     '1433'
                 dbname:   'MAJESTIC'
@@ -36,15 +36,6 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         default_entity_manager: default
         entity_managers:
-            default2:
-                connection: default
-                mappings:
-                    Entry:
-                        is_bundle: false
-                        type: annotation
-                        dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity\User'
-                        alias: User
             default:
                 connection: default
                 mappings:
@@ -54,6 +45,13 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Entity'
                         prefix: 'App\Entity\Entry'
                         alias: Entry
+
+                    User:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\User'
+                        alias: User
                 dql:
                     datetime_functions:
                         convert_tz: DoctrineExtensions\Query\Mysql\ConvertTz

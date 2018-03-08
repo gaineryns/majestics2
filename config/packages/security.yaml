@@ -41,3 +41,5 @@ security:
         # Les regles de securité
         # Là dans ce cas seul les utilisateurs ayant le rôle ROLE_ADMIN
         # peuvent acceder à toutes les pages commençant par /admin
+
+       # - { path: '^/accueil', roles: ROLE_USER }
