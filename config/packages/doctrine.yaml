@@ -31,7 +31,7 @@ doctrine:
                 dbname:   'MAJESTIC'
                 user:     'ADMIN'
                 password: 'ADMIN'
-                charset:  UTF8
+                #charset:  UTF8
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         default_entity_manager: default
