@@ -76,19 +76,6 @@ class TicketsController extends Controller
     }
 
 
-    /**
-     * @Route("/tickets",name="ticket")
-     */
-    public function testticketAction(Request $request, \Swift_Mailer $mailer){
-
-        $repo = $this->getDoctrine()->getRepository(Tickets::class, 'ticket');
-        $tickets = $repo->ticketlist();
-
-
-        return $this->render('Tickets/home.html.twig',[ ]);
-    }
-
-
 
     /**
      * @Route("/accueil",name="accueil")
@@ -119,7 +106,7 @@ class TicketsController extends Controller
                     'text/html')
             ->attach(\Swift_Attachment::fromPath($name));
 
-            $mailer->send($message);
+           // $mailer->send($message);
 
 
 
@@ -163,7 +150,7 @@ class TicketsController extends Controller
                     'text/html')
                 ->attach(\Swift_Attachment::fromPath($name));
 
-            $mailer->send($message);
+            //$mailer->send($message);
 
 
 
@@ -214,7 +201,7 @@ class TicketsController extends Controller
          */
         $spreadsheet = new Spreadsheet();
 
-        $header = ["Magasin", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation en %"];
+        $header = ["Magasin", "Nombre de ventes", "Nombre d'entrées","Nombre de sorties", "Taux de transformation en %"];
         $tableau = [];
         $tableau[0] = $header;
 
@@ -253,6 +240,7 @@ class TicketsController extends Controller
                 continue;
             } else {
                 $entree_total = 0;
+                $sortie_total = 0;
                 $ticket_total = 0;
 
                 foreach ($entry as $enter) {
@@ -265,13 +253,15 @@ class TicketsController extends Controller
                     }
                     $nbrAcheteur = 0;
                     $nbrEntree = (intval($enter['enter']) ? intval($enter['enter']) : 0);
+                    $nbrSortie = (intval($enter['sortie']) ? intval($enter['sortie']) : 0);
                     $entree_total += $nbrEntree;
+                    $sortie_total += $nbrSortie;
 
 
                     $taux = 0;
 
 
-                    $tableau[] = [$magasin, $nbrAcheteur, $nbrEntree, $taux];
+                    $tableau[] = [$magasin, $nbrAcheteur, $nbrEntree,$nbrSortie, $taux];
                 }
 
 
@@ -290,13 +280,13 @@ class TicketsController extends Controller
                          * evitons une division par zero
                          */
                         if ($tableau[$i][2] == 0) {
-                            $tableau[$i][3] = 0;
+                            $tableau[$i][4] = 0;
                         } else {
-                            $tableau[$i][3] = floatval(round($tableau[$i][1] / $tableau[$i][2] * 100, 2));
+                            $tableau[$i][4] = floatval(round($tableau[$i][1] / $tableau[$i][2] * 100, 2));
                         }
                     }
                     if (!$champ) {
-                        $tableau[] = [$ticket['etablissement'], (intval($ticket['nombre_acheteur']) ? intval($ticket['nombre_acheteur']) : 0), 0, 0];
+                        $tableau[] = [$ticket['etablissement'], (intval($ticket['nombre_acheteur']) ? intval($ticket['nombre_acheteur']) : 0), 0, 0, 0];
                     }
 
                 }
@@ -313,7 +303,7 @@ class TicketsController extends Controller
 
         }
 
-
+/*
         $ticketIDF = $ticketRepo->ticketIleFrance([$agencies[7]['magasin'], $agencies[11]['magasin'],
             $agencies[12]['magasin'], $agencies[14]['magasin'], $agencies[2]['magasin'], $agencies[5]['magasin']
             , $agencies[16]['magasin']
@@ -329,7 +319,7 @@ class TicketsController extends Controller
         foreach ($entreeIDF as $Eidf) {
             $entreeIDF1 = $Eidf['enter'];
         }
-
+*/
         //$tableau[] = ['Ile-de-france', $ticketIDF1, $entreeIDF1, ($entreeIDF1 == 0) ? 0 : floatval(round(($ticketIDF1 / $entreeIDF1) * 100, 2))];
 
 
@@ -344,18 +334,21 @@ class TicketsController extends Controller
 
         $oneMoreSheet->setCellValue('B1', 'Nombre de ventes' );
         $oneMoreSheet->setCellValue('C1', 'Nombre d\'entrées');
-        $oneMoreSheet->setCellValue('D1', 'Taux de transformation en %');
+        $oneMoreSheet->setCellValue('D1', 'Nombre de sorties');
+        $oneMoreSheet->setCellValue('E1', 'Taux de transformation en %');
 
-        $oneMoreSheet->setCellValue('A2', "Récapitulatif magasins France" );
+        $oneMoreSheet->setCellValue('A2', "Récapitulatif de tous les magasins " );
         $oneMoreSheet->setCellValue('B2', '=SUM(B6:B2000)' );
         $oneMoreSheet->setCellValue('C2', '=SUM(C6:C2000)');
-        $oneMoreSheet->setCellValue('D2', '=ROUND(((B2/C2)*100),2)');
+        $oneMoreSheet->setCellValue('D2', '=SUM(D6:D2000)');
+        $oneMoreSheet->setCellValue('E2', '=ROUND(((B2/C2)*100),2)');
 
 
         $oneMoreSheet->setCellValue('A3', "Récapitulatif magasin(s) sélectionné(s)" );
         $oneMoreSheet->setCellValue('B3', '=SUBTOTAL(109,B6:B2000)' );
         $oneMoreSheet->setCellValue('C3', '=SUBTOTAL(109,C6:C2000)');
-        $oneMoreSheet->setCellValue('D3', '=ROUND(((B3/C3)*100),2)');
+        $oneMoreSheet->setCellValue('D3', '=SUBTOTAL(109,D6:D2000)');
+        $oneMoreSheet->setCellValue('E3', '=ROUND(((B3/C3)*100),2)');
 
 
 
@@ -375,7 +368,8 @@ class TicketsController extends Controller
         $oneMoreSheet->getColumnDimension('A')->setWidth(20);
         $oneMoreSheet->getColumnDimension('B')->setWidth(20);
         $oneMoreSheet->getColumnDimension('C')->setWidth(20);
-        $oneMoreSheet->getColumnDimension('D')->setWidth(30);
+        $oneMoreSheet->getColumnDimension('D')->setWidth(20);
+        $oneMoreSheet->getColumnDimension('E')->setWidth(30);
 
         $oneMoreSheet->getRowDimension('1')->setRowHeight(40);
 
@@ -399,18 +393,18 @@ class TicketsController extends Controller
         $oneMoreSheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        $oneMoreSheet->getStyle('A1:D3')->applyFromArray($styleArray1);
-        $oneMoreSheet->getStyle('A1:D3')->getAlignment()->setWrapText(true);
+        $oneMoreSheet->getStyle('A1:E3')->applyFromArray($styleArray1);
+        $oneMoreSheet->getStyle('A1:E3')->getAlignment()->setWrapText(true);
 
-        $oneMoreSheet->getStyle('B1:D1')->getFill()
+        $oneMoreSheet->getStyle('B1:E1')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
-        $oneMoreSheet->getStyle('A2:D2')->getFill()
+        $oneMoreSheet->getStyle('A2:E2')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('eeeeee');
 
-        $oneMoreSheet->getStyle('A3:D3')->getFill()
+        $oneMoreSheet->getStyle('A3:E3')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
@@ -418,7 +412,7 @@ class TicketsController extends Controller
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
-        $oneMoreSheet->getStyle('B1:D1')->getFont()->setBold(true);
+        $oneMoreSheet->getStyle('B1:E1')->getFont()->setBold(true);
         $oneMoreSheet->getStyle('A2:A3')->getFont()->setBold(true);
 
 
@@ -440,7 +434,7 @@ class TicketsController extends Controller
 
 
         $oneMoreSheet->getStyle('A1:A200')->getFont()->setBold(true);
-        $oneMoreSheet->getStyle('A1:D200')->getBorders()->getAllBorders()
+        $oneMoreSheet->getStyle('A1:E200')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
 
@@ -453,8 +447,9 @@ class TicketsController extends Controller
 
         $Cumulentree_total = 0;
         $Cumulticket_total = 0;
+        $Cumulsortie_total = 0;
 
-        $headerC = ["Magasin(s)", "Date et heure", "Nombre de ventes", "Nombre d'entrées", "Taux de transformation en %"];
+        $headerC = ["Magasin(s)", "Date et heure", "Nombre de ventes", "Nombre d'entrées","Nombre de sorties", "Taux de transformation en %"];
         $tableauC = [];
         $tableauC[0] = $headerC;
 
@@ -463,7 +458,9 @@ class TicketsController extends Controller
             $heure = $enter['heure_creation'];
             $nbrAcheteur = 0;
             $nbrEntree = (intval($enter['enter']) ? intval($enter['enter']) : 0);
+            $nbrSortie = (intval($enter['sortie']) ? intval($enter['sortie']) : 0);
             $Cumulentree_total += $nbrEntree;
+            $Cumulsortie_total += $nbrSortie;
 
 
             $taux = 0;
@@ -476,7 +473,7 @@ class TicketsController extends Controller
 
                 }
             }
-            $tableauC[] = [$etablissement, $heure, $nbrAcheteur, $nbrEntree, $taux];
+            $tableauC[] = [$etablissement, $heure, $nbrAcheteur, $nbrEntree, $nbrSortie, $taux];
         }
 
 
@@ -497,9 +494,9 @@ class TicketsController extends Controller
                 * evitons une division par zero
                 */
                     if (($tableauC[$i][3] == 0)|| ($tableauC[$i][3] == '') || empty($tableauC[$i][2])) {
-                        $tableauC[$i][4] = 0;
+                        $tableauC[$i][5] = 0;
                     } else {
-                        $tableauC[$i][4] = floatval(round($tableauC[$i][2] / $tableauC[$i][3] * 100));
+                        $tableauC[$i][5] = floatval(round($tableauC[$i][2] / $tableauC[$i][3] * 100));
                     }
                 }
 
@@ -527,18 +524,21 @@ class TicketsController extends Controller
 
             $cumulsheet->setCellValue('B1', 'Nombre de ventes' );
             $cumulsheet->setCellValue('C1', 'Nombre d\'entrées');
-            $cumulsheet->setCellValue('D1', 'Taux de transformation en %');
+            $cumulsheet->setCellValue('D1', 'Nombre de sorties');
+            $cumulsheet->setCellValue('E1', 'Taux de transformation en %');
 
             $cumulsheet->setCellValue('A2', "Récapitulatif magasins France" );
             $cumulsheet->setCellValue('B2', '=SUM(C6:C2000)' );
             $cumulsheet->setCellValue('C2', '=SUM(D6:D2000)');
-            $cumulsheet->setCellValue('D2', '=ROUND(((B2/C2)*100),2)');
+            $cumulsheet->setCellValue('D2', '=SUM(E6:E2000)');
+            $cumulsheet->setCellValue('E2', '=ROUND(((B2/C2)*100),2)');
 
 
             $cumulsheet->setCellValue('A3', "Récapitulatif magasin(s) sélectionné(s)" );
             $cumulsheet->setCellValue('B3', '=SUBTOTAL(109,C6:C2000)' );
             $cumulsheet->setCellValue('C3', '=SUBTOTAL(109,D6:D2000)');
-            $cumulsheet->setCellValue('D3', '=ROUND(((B3/C3)*100),2)');
+            $cumulsheet->setCellValue('D3', '=SUBTOTAL(109,E6:E2000)');
+            $cumulsheet->setCellValue('E3', '=ROUND(((B3/C3)*100),2)');
 
 
             /*
@@ -570,26 +570,26 @@ class TicketsController extends Controller
         $cumulsheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
-        $cumulsheet->getStyle('A1:D3')->applyFromArray($styleArray);
-        $cumulsheet->getStyle('A1:D3')->getAlignment()->setWrapText(true);
+        $cumulsheet->getStyle('A1:E3')->applyFromArray($styleArray);
+        $cumulsheet->getStyle('A1:E3')->getAlignment()->setWrapText(true);
 
-        $cumulsheet->getStyle('B1:D1')->getFill()
+        $cumulsheet->getStyle('B1:E1')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
-        $cumulsheet->getStyle('A2:D2')->getFill()
+        $cumulsheet->getStyle('A2:E2')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('eeeeee');
 
-        $cumulsheet->getStyle('A3:D3')->getFill()
+        $cumulsheet->getStyle('A3:E3')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
-        $cumulsheet->getStyle('A5:E5')->getFill()
+        $cumulsheet->getStyle('A5:F5')->getFill()
             ->setFillType('\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID')
             ->getStartColor()->setARGB('dddddd');
 
-        $cumulsheet->getStyle('B1:D1')->getFont()->setBold(true);
+        $cumulsheet->getStyle('B1:E1')->getFont()->setBold(true);
         $cumulsheet->getStyle('A2:A3')->getFont()->setBold(true);
       /*  $cumulsheet->getStyle('B1:D1')->applyFromArray($styleArray);
         $cumulsheet->getStyle('B1:D1')->getAlignment()->setWrapText(true);*/
@@ -603,7 +603,7 @@ class TicketsController extends Controller
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER],
             'borders'=>['allBorders' =>['style'=> \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM]]
         ];
-        $cumulsheet->getStyle('A5:E5')->applyFromArray($cell_st);
+        $cumulsheet->getStyle('A5:F5')->applyFromArray($cell_st);
 
 //set columns width
         $cumulsheet->getColumnDimension('A')->setWidth(20);
@@ -611,6 +611,7 @@ class TicketsController extends Controller
         $cumulsheet->getColumnDimension('C')->setWidth(20);
         $cumulsheet->getColumnDimension('D')->setWidth(25);
         $cumulsheet->getColumnDimension('E')->setWidth(25);
+        $cumulsheet->getColumnDimension('F')->setWidth(25);
 
         /*$cumulsheet->getRowDimension('1')->setRowHeight(40);*/
 
@@ -618,7 +619,7 @@ class TicketsController extends Controller
 
 
 
-        $cumulsheet->setAutoFilter('A5:E2000');
+        $cumulsheet->setAutoFilter('A5:F2000');
 
 
 /*
