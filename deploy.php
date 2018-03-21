@@ -34,7 +34,7 @@ host('steveyongwo.com')
     ->stage('prod')
     ->user('defaultmajestic')
     ->port(2222)
-    ->set('deploy_path', '/var/www/clients/client0/web2/web');
+    ->set('deploy_path', '/var/www/clients/client0/web3/web');
 
 
 // Tasks

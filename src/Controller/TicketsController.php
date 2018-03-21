@@ -20,14 +20,17 @@ class TicketsController extends Controller
      */
     public function updateDataAction(){
 
-        $agencies = ['AIXENPROVENCE', 'AVIGNON', 'BONAPARTE', 'BRUXELLES-LOUISE', 'CANNES', 'FRANCS_BOURGEOIS',
+       $agencies = ['AIXENPROVENCE', 'AVIGNON', 'BONAPARTE', 'BRUXELLES-LOUISE','BRUXELLES-ANTOINE', 'CANNES', 'FRANCS_BOURGEOIS',
             'LAPOMPE', 'LOUVRE', 'LUXEMBOURG', 'LYON', 'MONTPELLIER', 'PASSYHOMME', 'PASSY_FEMME', 'SAINTHONORE', 'SEINE', 'STRASBOURG', 'VICTORHUGO' ];
+
+
 
         //$agencies = array_reverse($agencies);
 
         foreach ($agencies as $agency){
             $finder = new Finder();
             $finder->name('*.dat')->date('since yesterday')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
+            //$finder->name('*.dat')->in('ftp://Stanley:StanleyFTPMF75@37.58.138.236/'. $agency);
 
             foreach ($finder as $file){
 
@@ -93,7 +96,11 @@ class TicketsController extends Controller
 
             $message = new \Swift_Message('Rapport Majestic Filatures');
             $message->setFrom('team@smartiiz.com')
+                ->setSubject('Rapport du jour')
                 ->setTo('steve.yongwo@smartiiz.com')
+                //->setTo('jessie@majesticfilatures.fr')
+                //->setCc('patricia@majesticfilatures.fr','celia@majesticfilatures.fr','eric@majesticfilatures.fr')
+                //->setBcc('steve.yongwo@smartiiz.com')
                 ->setBody('<html>' .
                     ' <body>' .
                     '  <p>Madame, Monsieur,</p>' .
@@ -106,7 +113,7 @@ class TicketsController extends Controller
                     'text/html')
             ->attach(\Swift_Attachment::fromPath($name));
 
-           // $mailer->send($message);
+            $mailer->send($message);
 
 
 
@@ -137,7 +144,11 @@ class TicketsController extends Controller
 
             $message = new \Swift_Message('Rapport Majestic Filatures');
             $message->setFrom('team@smartiiz.com')
+                ->setSubject('Rapport du jour')
                 ->setTo('steve.yongwo@smartiiz.com')
+                //->setTo('jessie@majesticfilatures.fr')
+                //->setCc('patricia@majesticfilatures.fr','celia@majesticfilatures.fr','eric@majesticfilatures.fr')
+                //->setBcc('steve.yongwo@smartiiz.com')
                 ->setBody('<html>' .
                     ' <body>' .
                     '  <p>Madame, Monsieur,</p>' .
@@ -150,13 +161,11 @@ class TicketsController extends Controller
                     'text/html')
                 ->attach(\Swift_Attachment::fromPath($name));
 
-            //$mailer->send($message);
+            $mailer->send($message);
 
 
 
         }
-        //$this->getAllFileCSV('2017-11-03', '2017-11-04');
-        //$this->getFileCSV('test', '2017-11-02', '2017-11-02');
         return $this->render('Tickets/home.html.twig',[ 'dated' => $datedebut,
             'datef' => $datefin]);
     }
@@ -292,35 +301,9 @@ class TicketsController extends Controller
                 }
 
             }
-            // $tableau[] = ["Totaux", $ticket_total, $entree_total, str_replace('.', ',', round(($entree_total? 100*$ticket_total/$entree_total:0),2))." %"];
-
-            /*
-             * pour chaque donnée de magasin stockée dans le $tableau, créons et
-             * enrégistrons ces données dans une feuille de calcul de notre classeur
-             * portant le nom du magasin en cours de traitement
-             */
 
 
         }
-
-/*
-        $ticketIDF = $ticketRepo->ticketIleFrance([$agencies[7]['magasin'], $agencies[11]['magasin'],
-            $agencies[12]['magasin'], $agencies[14]['magasin'], $agencies[2]['magasin'], $agencies[5]['magasin']
-            , $agencies[16]['magasin']
-        ], date_format($date_debut, 'Y-m-d'), date_format($date_fin, 'Y-m-d'));
-
-        foreach ($ticketIDF as $idf) {
-            $ticketIDF1 = $idf['nombre_acheteur'];
-        }
-        $entreeIDF = $entryRepo->entreeIleFrance([$agencies[7]['capteur'], $agencies[11]['capteur'],
-            $agencies[12]['capteur'], $agencies[14]['capteur']
-            , $agencies[2]['capteur'], $agencies[5]['capteur'], $agencies[16]['capteur']],date_format($date_debut, 'Y-m-d'), date_format($date_fin, 'Y-m-d'));
-
-        foreach ($entreeIDF as $Eidf) {
-            $entreeIDF1 = $Eidf['enter'];
-        }
-*/
-        //$tableau[] = ['Ile-de-france', $ticketIDF1, $entreeIDF1, ($entreeIDF1 == 0) ? 0 : floatval(round(($ticketIDF1 / $entreeIDF1) * 100, 2))];
 
 
         $oneMoreSheet = $spreadsheet->createSheet(1);
@@ -567,7 +550,7 @@ class TicketsController extends Controller
         $cumulsheet->getRowDimension('5')->setRowHeight(30);
 
 
-        $cumulsheet->getStyle('A5:E2000')->getBorders()->getAllBorders()
+        $cumulsheet->getStyle('A5:F2000')->getBorders()->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         $cumulsheet->getStyle('A1:E3')->applyFromArray($styleArray);

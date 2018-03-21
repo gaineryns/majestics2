@@ -48,7 +48,7 @@ class SecurityController extends AbstractController
             $user->setRoles(['ROLE_USER']);
 
             // On enregistre l'utilisateur dans la base
-            $em = $this->getDoctrine()->getManager('default2');
+            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
