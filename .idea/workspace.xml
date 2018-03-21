@@ -2,58 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84b49cd0-284e-46ca-a22b-e8f178fc2908" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/.htaccess" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-01.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-03.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-10.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-11.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-12.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-13.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-14.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-15.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-16.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-17.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-18.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-19.xlsx" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/Rapport-2018-03-20.xlsx" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/dev/routing.yaml" afterPath="$PROJECT_DIR$/config/packages/dev/routing.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/dev/swiftmailer.yaml" afterPath="$PROJECT_DIR$/config/packages/dev/swiftmailer.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/dev/web_profiler.yaml" afterPath="$PROJECT_DIR$/config/packages/dev/web_profiler.yaml" />
       <change beforePath="$PROJECT_DIR$/config/packages/doctrine.yaml" afterPath="$PROJECT_DIR$/config/packages/doctrine.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/doctrine_migrations.yaml" afterPath="$PROJECT_DIR$/config/packages/doctrine_migrations.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/framework.yaml" afterPath="$PROJECT_DIR$/config/packages/framework.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/prod/doctrine.yaml" afterPath="$PROJECT_DIR$/config/packages/prod/doctrine.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/routing.yaml" afterPath="$PROJECT_DIR$/config/packages/routing.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" afterPath="$PROJECT_DIR$/config/packages/security.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/swiftmailer.yaml" afterPath="$PROJECT_DIR$/config/packages/swiftmailer.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/test/framework.yaml" afterPath="$PROJECT_DIR$/config/packages/test/framework.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/test/swiftmailer.yaml" afterPath="$PROJECT_DIR$/config/packages/test/swiftmailer.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/test/web_profiler.yaml" afterPath="$PROJECT_DIR$/config/packages/test/web_profiler.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/translation.yaml" afterPath="$PROJECT_DIR$/config/packages/translation.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/packages/twig.yaml" afterPath="$PROJECT_DIR$/config/packages/twig.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/routes.yaml" afterPath="$PROJECT_DIR$/config/routes.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/routes/annotations.yaml" afterPath="$PROJECT_DIR$/config/routes/annotations.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/routes/dev/twig.yaml" afterPath="$PROJECT_DIR$/config/routes/dev/twig.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/routes/dev/web_profiler.yaml" afterPath="$PROJECT_DIR$/config/routes/dev/web_profiler.yaml" />
-      <change beforePath="$PROJECT_DIR$/config/services.yaml" afterPath="$PROJECT_DIR$/config/services.yaml" />
-      <change beforePath="$PROJECT_DIR$/deploy.php" afterPath="$PROJECT_DIR$/deploy.php" />
-      <change beforePath="$PROJECT_DIR$/public/index.php" afterPath="$PROJECT_DIR$/public/index.php" />
-      <change beforePath="$PROJECT_DIR$/public/majesticsfilatures.svg" afterPath="$PROJECT_DIR$/public/majesticsfilatures.svg" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TicketsController.php" afterPath="$PROJECT_DIR$/src/Controller/TicketsController.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Entry.php" afterPath="$PROJECT_DIR$/src/Entity/Entry.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Tickets.php" afterPath="$PROJECT_DIR$/src/Entity/Tickets.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" afterPath="$PROJECT_DIR$/src/Entity/User.php" />
-      <change beforePath="$PROJECT_DIR$/src/Form/UserType.php" afterPath="$PROJECT_DIR$/src/Form/UserType.php" />
-      <change beforePath="$PROJECT_DIR$/src/Kernel.php" afterPath="$PROJECT_DIR$/src/Kernel.php" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/EntryRepository.php" afterPath="$PROJECT_DIR$/src/Repository/EntryRepository.php" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/TicketsRepository.php" afterPath="$PROJECT_DIR$/src/Repository/TicketsRepository.php" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" />
-      <change beforePath="$PROJECT_DIR$/templates/Tickets/home.html.twig" afterPath="$PROJECT_DIR$/templates/Tickets/home.html.twig" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" afterPath="$PROJECT_DIR$/templates/base.html.twig" />
-      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" />
-      <change beforePath="$PROJECT_DIR$/templates/security/register.html.twig" afterPath="$PROJECT_DIR$/templates/security/register.html.twig" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -112,11 +62,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="majestic_script.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="majestic_script.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/majestic_script.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="23">
               <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="deploy.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/deploy.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="36" column="55" lean-forward="false" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".env" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="25">
+              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="doctrine.yaml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/packages/doctrine.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="17" column="17" lean-forward="false" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -191,15 +171,15 @@
         <option value="$PROJECT_DIR$/src/Entity/Tickets.php" />
         <option value="$PROJECT_DIR$/src/Repository/TicketsRepository.php" />
         <option value="$PROJECT_DIR$/src/Entity/User.php" />
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/.env.dist" />
         <option value="$PROJECT_DIR$/src/Repository/EntryRepository.php" />
         <option value="$PROJECT_DIR$/src/Controller/TicketsController.php" />
-        <option value="$PROJECT_DIR$/config/packages/doctrine.yaml" />
         <option value="$PROJECT_DIR$/deploy.php" />
         <option value="$PROJECT_DIR$/config/packages/security.yaml" />
         <option value="$PROJECT_DIR$/src/Controller/SecurityController.php" />
         <option value="$PROJECT_DIR$/majestic_script.sh" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/config/packages/doctrine.yaml" />
       </list>
     </option>
   </component>
@@ -329,7 +309,18 @@
             <path>
               <item name="majestics2" type="b2602c69:ProjectViewProjectNode" />
               <item name="majestics2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="var" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="majestics2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="majestics2" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="packages" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="majestics2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="majestics2" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="public" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -400,7 +391,7 @@
       <workItem from="1521193013956" duration="875000" />
       <workItem from="1521215535234" duration="1172000" />
       <workItem from="1521217392062" duration="225000" />
-      <workItem from="1521621211828" duration="1829000" />
+      <workItem from="1521621211828" duration="2408000" />
     </task>
     <task id="LOCAL-00001" summary="fichier pour toutes les agences générés pour une date défini">
       <created>1517558505903</created>
@@ -703,11 +694,25 @@
       <option name="project" value="LOCAL" />
       <updated>1520863735880</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="version online add exit !">
+      <created>1521623119771</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1521623119771</updated>
+    </task>
+    <task id="LOCAL-00045" summary="version online add exit file delete !">
+      <created>1521623165208</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1521623165208</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="308945000" />
+    <option name="totallyTimeSpent" value="309524000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
@@ -786,7 +791,8 @@
     <MESSAGE value="version online done !" />
     <MESSAGE value="version online done2 !" />
     <MESSAGE value="version online add exit !" />
-    <option name="LAST_COMMIT_MESSAGE" value="version online add exit !" />
+    <MESSAGE value="version online add exit file delete !" />
+    <option name="LAST_COMMIT_MESSAGE" value="version online add exit file delete !" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1002,13 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="21" lean-forward="false" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Repository/EntryRepository.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -1027,13 +1026,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10404">
           <caret line="621" column="40" lean-forward="false" selection-start-line="621" selection-start-column="40" selection-end-line="621" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/deploy.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="36" column="55" lean-forward="false" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
         </state>
       </provider>
     </entry>
@@ -1117,14 +1109,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/packages/doctrine.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="25" column="16" lean-forward="false" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Form/UserType.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1137,6 +1121,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deploy.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="36" column="55" lean-forward="false" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/packages/doctrine.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="17" column="17" lean-forward="false" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
           <folding />
         </state>
       </provider>
